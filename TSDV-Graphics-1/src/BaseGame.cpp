@@ -1,6 +1,9 @@
 #include <GLFW/include/glfw3.h>
 #include "BaseGame.h"
 #include "Window.h"
+#include "Renderer.h"
+
+using namespace GuichernoEngine;
 
 int BaseGame::run()
 {
@@ -9,6 +12,7 @@ int BaseGame::run()
         return -1;
 
     Window gmWindow = Window(640, 480, "Hello World");
+    Renderer renderer = Renderer();
 
     if (!gmWindow.IsWindowOpen())
     {
@@ -23,10 +27,10 @@ int BaseGame::run()
     while (!gmWindow.ShouldClose())
     {
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        renderer.Clear();
 
         /* Swap front and back buffers */
-        glfwSwapBuffers(gmWindow.GetGLFWwindow());
+        renderer.SwapBuffers(gmWindow);
 
         /* Poll for and process events */
         glfwPollEvents();

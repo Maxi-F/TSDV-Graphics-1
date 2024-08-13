@@ -1,31 +1,26 @@
 #include "Window.h"
 
-Window::Window(int width, int heigth, const char* windowName)
+GuichernoEngine::Window::Window(int width, int heigth, const char* windowName)
 {
 	this->gmWindow = glfwCreateWindow(width, heigth, windowName, NULL, NULL);
 }
 
-Window::~Window()
-{
-	delete this->gmWindow;
-}
-
-GLFWwindow* Window::GetGLFWwindow()
+GLFWwindow* GuichernoEngine::Window::GetGLFWwindow()
 {
 	return gmWindow;
 }
 
-void Window::MakeCurrent()
+void GuichernoEngine::Window::MakeCurrent()
 {
 	glfwMakeContextCurrent(this->gmWindow);
 }
 
-bool Window::ShouldClose()
+bool GuichernoEngine::Window::ShouldClose()
 {
 	return glfwWindowShouldClose(this->gmWindow);
 }
 
-bool Window::IsWindowOpen()
+bool GuichernoEngine::Window::IsWindowOpen()
 {
 	return this->gmWindow;
 }

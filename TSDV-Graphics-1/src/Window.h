@@ -1,17 +1,20 @@
 #pragma once
 #include <GLFW/include/glfw3.h>
 
-class Window
+namespace GuichernoEngine
 {
-private:
-	GLFWwindow* gmWindow;
+	class Window
+	{
+	private:
+		GLFWwindow* gmWindow;
 
-public:
-	Window(int width, int heigth, const char* windowName);
-	~Window();
+	public:
+		Window(int width, int heigth, const char* windowName);
 
-	GLFWwindow* GetGLFWwindow();
-	void MakeCurrent();
-	bool ShouldClose();
-	bool IsWindowOpen();
-};
+		GLFWwindow* GetGLFWwindow();
+		void MakeCurrent();
+		bool ShouldClose();
+		bool IsWindowOpen();
+	};
+}
+
