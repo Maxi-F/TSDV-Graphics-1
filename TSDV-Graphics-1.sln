@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TSDV-Graphics-1", "TSDV-Graphics-1\TSDV-Graphics-1.vcxproj", "{9852EC48-59E8-432F-9A8D-BAC2B5E1EC67}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GMGame", "GMGame\GMGame.vcxproj", "{5DED45D2-9E8F-447D-9558-C048F38CD568}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{9852EC48-59E8-432F-9A8D-BAC2B5E1EC67}.Debug|x86.Build.0 = Debug|Win32
 		{9852EC48-59E8-432F-9A8D-BAC2B5E1EC67}.Release|x86.ActiveCfg = Release|Win32
 		{9852EC48-59E8-432F-9A8D-BAC2B5E1EC67}.Release|x86.Build.0 = Release|Win32
+		{5DED45D2-9E8F-447D-9558-C048F38CD568}.Debug|x86.ActiveCfg = Debug|Win32
+		{5DED45D2-9E8F-447D-9558-C048F38CD568}.Debug|x86.Build.0 = Debug|Win32
+		{5DED45D2-9E8F-447D-9558-C048F38CD568}.Release|x86.ActiveCfg = Release|Win32
+		{5DED45D2-9E8F-447D-9558-C048F38CD568}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

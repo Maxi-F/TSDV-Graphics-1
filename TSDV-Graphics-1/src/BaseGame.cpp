@@ -1,6 +1,7 @@
 #include <GLFW/include/glfw3.h>
+#include "BaseGame.h"
 
-int main(void)
+int BaseGame::run()
 {
     GLFWwindow* window;
 
