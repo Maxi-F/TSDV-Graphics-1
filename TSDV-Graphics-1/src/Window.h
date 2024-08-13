@@ -1,4 +1,5 @@
 #pragma once
+#include <GLEW/include/glew.h>
 #include <GLFW/include/glfw3.h>
 
 namespace GuichernoEngine
