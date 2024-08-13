@@ -2,5 +2,6 @@
 
 class BaseGame 
 {
-	int run();
+	public:
+		int run();
 };
