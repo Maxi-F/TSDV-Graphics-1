@@ -1,4 +1,5 @@
 #pragma once
+#include <GLEW/include/glew.h>
 #include "Window.h"
 
 namespace GuichernoEngine
@@ -8,5 +9,7 @@ namespace GuichernoEngine
 		public:
 			void Clear();
 			void SwapBuffers(Window window);
+			void GenerateBuffer();
+			void Draw();
 	};
 }

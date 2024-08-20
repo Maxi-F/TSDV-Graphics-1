@@ -1,4 +1,3 @@
-#include <GLFW/include/glfw3.h>
 #include "BaseGame.h"
 #include "Window.h"
 #include "Renderer.h"
@@ -23,11 +22,15 @@ int BaseGame::run()
     /* Make the window's context current */
     gmWindow.MakeCurrent();
 
+    renderer.GenerateBuffer();
+
     /* Loop until the user closes the window */
     while (!gmWindow.ShouldClose())
     {
         /* Render here */
         renderer.Clear();
+
+        renderer.Draw();
 
         /* Swap front and back buffers */
         renderer.SwapBuffers(gmWindow);
