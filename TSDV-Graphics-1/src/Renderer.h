@@ -4,16 +4,17 @@
 #include "BufferPointer.h"
 
 namespace GuichernoEngine
-{
+{	
+	const int MAX_VERTEX_COUNT = 1024;
+	
 	class Renderer
 	{
+
 		private:
-			// TODO MAKE THIS VARIABLE
-			static float vertices[500];
+			static float vertices[MAX_VERTEX_COUNT];
 			static int vertexCount;
 
 		public:
-			static void Initialize();
 			static void Clear();
 			static void SwapBuffers(Window window);
 			static void GenerateBuffer();
