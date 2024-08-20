@@ -1,6 +1,7 @@
 #include "BaseGame.h"
 #include "Window.h"
 #include "Renderer.h"
+#include "Shape.h"
 
 using namespace GuichernoEngine;
 
@@ -11,7 +12,7 @@ int BaseGame::run()
         return -1;
 
     Window gmWindow = Window(640, 480, "Hello World");
-    Renderer renderer = Renderer();
+    Renderer renderer;
 
     if (!gmWindow.IsWindowOpen())
     {
@@ -22,6 +23,15 @@ int BaseGame::run()
     /* Make the window's context current */
     gmWindow.MakeCurrent();
 
+    float vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f
+    };
+
+    Shape triangle = Shape(vertices);
+    Shape triangle2 = Shape(vertices);
+
     renderer.GenerateBuffer();
 
     /* Loop until the user closes the window */
@@ -30,7 +40,8 @@ int BaseGame::run()
         /* Render here */
         renderer.Clear();
 
-        renderer.Draw();
+        triangle.Draw();
+        triangle2.Draw();
 
         /* Swap front and back buffers */
         renderer.SwapBuffers(gmWindow);

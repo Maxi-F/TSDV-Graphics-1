@@ -1,5 +1,9 @@
 #include "Renderer.h"
 
+
+int GuichernoEngine::Renderer::vertexCount = 0;
+float GuichernoEngine::Renderer::vertices[];
+
 void GuichernoEngine::Renderer::Clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -14,21 +18,38 @@ void GuichernoEngine::Renderer::GenerateBuffer()
 {
 	glewInit();
 
-	float vertices[9] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
-	};
+	float* verticesToBuffer = new float[vertexCount];
+
+	for (int i = 0; i < vertexCount; i++) 
+	{
+		verticesToBuffer[i] = vertices[i];
+	}
 
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesToBuffer), verticesToBuffer, GL_STATIC_DRAW);
+
+	delete[] verticesToBuffer;
 }
 
-void GuichernoEngine::Renderer::Draw()
+void GuichernoEngine::Renderer::DrawArrays(BufferPointer pointer)
 {
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, pointer.start, pointer.end);
+}
+
+GuichernoEngine::BufferPointer GuichernoEngine::Renderer::AddVertices(float verticesToAdd[], int count) 
+{
+	for (int i = 0; i < count; i++)
+	{
+		vertices[vertexCount + i] = verticesToAdd[i];
+	}
+
+	BufferPointer pointer = { vertexCount, vertexCount + count };
+
+	vertexCount += count;
+
+	return pointer;
 }
