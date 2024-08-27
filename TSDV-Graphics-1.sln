@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TSDV-Graphics-1", "TSDV-Graphics-1\TSDV-Graphics-1.vcxproj", "{9852EC48-59E8-432F-9A8D-BAC2B5E1EC67}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GMGame", "GMGame\GMGame.vcxproj", "{5DED45D2-9E8F-447D-9558-C048F38CD568}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9852EC48-59E8-432F-9A8D-BAC2B5E1EC67} = {9852EC48-59E8-432F-9A8D-BAC2B5E1EC67}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
