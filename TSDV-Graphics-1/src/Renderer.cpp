@@ -26,11 +26,18 @@ void GuichernoEngine::Renderer::GenerateBuffer()
 	}
 
 	unsigned int VBO;
+
+	// Generate a buffer in VRAM.
 	glGenBuffers(1, &VBO);
 
+	// Bind the buffer to a buffer type for interpretation.
+	// ARRAY_BUFFER in this case binds it as an array of vertices.
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesToBuffer), verticesToBuffer, GL_STATIC_DRAW);
+	// Set data on the buffer.
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexCount, verticesToBuffer, GL_STATIC_DRAW);
+
+
 
 	delete[] verticesToBuffer;
 }
