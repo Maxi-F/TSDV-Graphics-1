@@ -1,11 +1,11 @@
 #include <iostream>
-#include "BaseGame.h"
+#include "Game.h"
 
 using namespace std;
 
 int main()
 {
-	BaseGame bs = BaseGame();
+	Game game = Game();
 	
-	return bs.run();
+	return game.StartEngine();
 }
