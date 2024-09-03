@@ -1,6 +1,7 @@
 #include "Shape.h"
 #include "Renderer.h"
 
+
 GuichernoEngine::Shape::Shape(float vertices[]) 
 {
 	Renderer renderer;

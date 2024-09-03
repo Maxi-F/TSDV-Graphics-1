@@ -1,12 +1,19 @@
 #pragma once
-#ifdef GUICHERNO_EXPORTS
-#define GUICHERNO_API __declspec(dllexport)
-#else
-#define GUICHERNO_API __declspec(dllimport)
-#endif
+#include "ExportHeader.h"
 
-class GUICHERNO_API BaseGame
+namespace GuichernoEngine
 {
+	class BaseGame
+	{
 	public:
-		int run();
-};
+		GUICHERNO_API BaseGame();
+		GUICHERNO_API ~BaseGame();
+
+		int GUICHERNO_API StartEngine();
+		int GUICHERNO_API StartGame();
+
+		virtual void GUICHERNO_API Init() = 0;
+		virtual void GUICHERNO_API DeInit() = 0;
+		virtual void GUICHERNO_API Update() = 0;
+	};
+}
