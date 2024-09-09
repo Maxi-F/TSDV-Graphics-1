@@ -31,10 +31,8 @@ void GuichernoEngine::Renderer::SwapBuffers(Window window)
 	glfwSwapBuffers(window.GetGLFWwindow());
 }
 
-void GuichernoEngine::Renderer::GenerateBuffer()
+void GuichernoEngine::Renderer::GenerateShaders()
 {
-	glewInit();
-
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -66,7 +64,8 @@ void GuichernoEngine::Renderer::GenerateBuffer()
 	{
 		glGetShaderInfoLog(fragmentShader, 512, NULL, fragmentInfoLog);
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << fragmentInfoLog << std::endl;
-	} else {
+	}
+	else {
 		std::cout << "Compile fragment success..." << std::endl;
 	}
 
@@ -86,7 +85,8 @@ void GuichernoEngine::Renderer::GenerateBuffer()
 	{
 		glGetProgramInfoLog(shaderProgram, 512, NULL, linkInfoLog);
 		std::cout << "ERROR::PROGRAM::LINK_FAILED\n" << linkInfoLog << std::endl;
-	} else {
+	}
+	else {
 		std::cout << "Link shaders success..." << std::endl;
 	}
 
@@ -94,6 +94,13 @@ void GuichernoEngine::Renderer::GenerateBuffer()
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+}
+
+void GuichernoEngine::Renderer::GenerateBuffer()
+{
+	glewInit();
+
+	GenerateShaders();
 
 	float* verticesToBuffer = new float[vertexCount];
 

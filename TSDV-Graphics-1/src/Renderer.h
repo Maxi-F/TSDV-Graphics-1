@@ -13,6 +13,7 @@ namespace GuichernoEngine
 		private:
 			static float vertices[MAX_VERTEX_COUNT];
 			static int vertexCount;
+			static void GenerateShaders();
 
 		public:
 			static void Clear();
