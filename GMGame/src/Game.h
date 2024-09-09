@@ -9,6 +9,7 @@ private:
 
 public:
 	GuichernoEngine::Shape* player;
+	GuichernoEngine::Shape* enemy;
 
 	Game();
 	~Game();

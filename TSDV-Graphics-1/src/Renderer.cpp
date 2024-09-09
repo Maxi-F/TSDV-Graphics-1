@@ -20,6 +20,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 
 int GuichernoEngine::Renderer::vertexCount = 0;
 float GuichernoEngine::Renderer::vertices[];
+float GuichernoEngine::Renderer::indices[];
 
 void GuichernoEngine::Renderer::Clear()
 {
