@@ -1,12 +1,15 @@
 #include "Renderer.h"
 #include "iostream"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "out vec4 vertexColor;\n"
+"uniform mat4 u_MVP;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = u_MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "   vertexColor = vec4(0.0f, 1.0f, 0.2f, 1.0f);\n"
 "}\0";
 
@@ -97,6 +100,12 @@ void GuichernoEngine::Renderer::GenerateShaders()
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+
+	glm::mat4x4 proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "u_MVP"), 1, GL_FALSE, &proj[0][0]);
+
+	std::cout << "TEST: " << glGetError() << std::endl;
 }
 
 void GuichernoEngine::Renderer::GenerateBuffer()
