@@ -53,27 +53,17 @@ int GuichernoEngine::BaseGame::StartGame()
     /* Loop until the user closes the window */
     while (!gmWindow->ShouldClose())
     {
-        std::cout << "In loop" << std::endl;
-
         /* Render here */
         gmRenderer->Clear();
         
-        std::cout << "clear render" << std::endl;
-
         Update();
-
-        std::cout << "update game" << std::endl;
 
         /* Swap front and back buffers */
         gmRenderer->SwapBuffers(*gmWindow);
 
-        std::cout << "swap buffers" << std::endl;
-
         /* Poll for and process events */
 
         glfwPollEvents();
-        std::cout << "poll" << std::endl;
-
     }
 
     DeInit();

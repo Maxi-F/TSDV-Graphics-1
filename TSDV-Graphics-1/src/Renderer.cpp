@@ -18,9 +18,11 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "	FragColor = vertexColor;\n"
 "}\0";
 
-int GuichernoEngine::Renderer::vertexCount = 0;
+unsigned int GuichernoEngine::Renderer::vertexCount = 0;
+unsigned int GuichernoEngine::Renderer::test = 0;
+unsigned int GuichernoEngine::Renderer::indexCount = 0;
 float GuichernoEngine::Renderer::vertices[];
-float GuichernoEngine::Renderer::indices[];
+unsigned int GuichernoEngine::Renderer::indices[];
 
 void GuichernoEngine::Renderer::Clear()
 {
@@ -104,10 +106,16 @@ void GuichernoEngine::Renderer::GenerateBuffer()
 	GenerateShaders();
 
 	float* verticesToBuffer = new float[vertexCount];
+	unsigned int* indicesToBuffer = new unsigned int[indexCount];
 
-	for (int i = 0; i < vertexCount; i++) 
+	for (unsigned int i = 0; i < vertexCount; i++) 
 	{
 		verticesToBuffer[i] = vertices[i];
+	}
+
+	for (unsigned int i = 0; i < indexCount; i++) 
+	{
+		indicesToBuffer[i] = indices[i];
 	}
 
 	unsigned int VBO;
@@ -126,26 +134,65 @@ void GuichernoEngine::Renderer::GenerateBuffer()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	// Bind element buffer for indices
+	unsigned int IBO;
+	glGenBuffers(1, &IBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * indexCount, indicesToBuffer, GL_STATIC_DRAW);
+
+
 	std::cout << "Set Everything" << std::endl;
 
 	delete[] verticesToBuffer;
+	delete[] indicesToBuffer;
 }
 
 void GuichernoEngine::Renderer::DrawArrays(BufferPointer pointer)
 {
-	glDrawArrays(GL_TRIANGLES, pointer.start, pointer.end);
+	glDrawElements(GL_TRIANGLES, pointer.quantity, GL_UNSIGNED_INT, (void*)(pointer.start * sizeof(GLuint)));
 }
 
-GuichernoEngine::BufferPointer GuichernoEngine::Renderer::AddVertices(float verticesToAdd[], int count) 
+GuichernoEngine::BufferPointer GuichernoEngine::Renderer::AddVertices(float verticesToAdd[], unsigned int count) 
 {
-	for (int i = 0; i < count; i++)
+	unsigned int previousIndexCount = indexCount;
+	const int FLOATS_PER_VERTEX = 3;
+
+	for (unsigned int i = 0; i < count; i += 3)
 	{
-		vertices[vertexCount + i] = verticesToAdd[i];
+		bool isVertexInArray = false;
+
+		float vertex[FLOATS_PER_VERTEX] = { verticesToAdd[i], verticesToAdd[i + 1], verticesToAdd[i + 2] };
+
+		for (unsigned int j = 0; j < vertexCount; j += FLOATS_PER_VERTEX) 
+		{
+			if (
+				vertices[j] == verticesToAdd[i] &&
+				vertices[j + 1] == verticesToAdd[i + 1] &&
+				vertices[j + 2] == verticesToAdd[i + 2]
+				) 
+			{
+				isVertexInArray = true;
+				indices[indexCount] = static_cast<unsigned int>(j / FLOATS_PER_VERTEX);
+				indexCount++;
+			}
+		}
+
+		if (isVertexInArray) 
+			continue;
+
+		std::cout << "VERTEX COUNT: " << vertexCount << std::endl;
+
+		for (unsigned int j = 0; j < FLOATS_PER_VERTEX; j++) {
+			vertices[vertexCount] = vertex[j];
+			vertexCount++;
+		}
+
+		indices[indexCount] = test;
+		indexCount++;
+		test++;
 	}
 
-	BufferPointer pointer = { vertexCount, vertexCount + count };
-
-	vertexCount += count;
+	BufferPointer pointer = { (int)previousIndexCount, (int)indexCount, static_cast<int>(count / FLOATS_PER_VERTEX)};
 
 	return pointer;
 }

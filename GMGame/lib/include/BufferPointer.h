@@ -6,5 +6,6 @@ namespace GuichernoEngine
 	{
 		int start;
 		int end;
+		int quantity;
 	};
 }

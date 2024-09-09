@@ -13,8 +13,10 @@ namespace GuichernoEngine
 
 		private:
 			static float vertices[MAX_VERTEX_COUNT];
-			static float indices[MAX_INDEX_COUNT];
-			static int vertexCount;
+			static unsigned int indices[MAX_INDEX_COUNT];
+			static unsigned int vertexCount;
+			static unsigned int test;
+			static unsigned int indexCount;
 			static void GenerateShaders();
 
 		public:
@@ -22,6 +24,6 @@ namespace GuichernoEngine
 			static void SwapBuffers(Window window);
 			static void GenerateBuffer();
 			static void DrawArrays(BufferPointer pointer);
-			static BufferPointer AddVertices(float verticesToAdd[], int count);
+			static BufferPointer AddVertices(float verticesToAdd[], unsigned int count);
 	};
 }
