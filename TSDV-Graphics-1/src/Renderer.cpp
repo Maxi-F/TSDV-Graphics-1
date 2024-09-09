@@ -101,7 +101,7 @@ void GuichernoEngine::Renderer::GenerateShaders()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-	glm::mat4x4 proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+	glm::mat4x4 proj = glm::ortho(0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
 
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "u_MVP"), 1, GL_FALSE, &proj[0][0]);
 
