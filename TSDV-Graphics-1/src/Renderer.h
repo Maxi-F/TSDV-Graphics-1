@@ -18,6 +18,7 @@ namespace GuichernoEngine
 			static unsigned int test;
 			static unsigned int indexCount;
 			static void GenerateShaders();
+			static bool isSameVertex(float vertices[], float otherVertices[], unsigned int vertexIndex, unsigned int otherVertexIndex, unsigned int vertexFloatCount);
 
 		public:
 			static void Clear();

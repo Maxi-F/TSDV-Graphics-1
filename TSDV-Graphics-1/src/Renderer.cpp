@@ -161,24 +161,29 @@ void GuichernoEngine::Renderer::DrawArrays(BufferPointer pointer)
 	glDrawElements(GL_TRIANGLES, pointer.quantity, GL_UNSIGNED_INT, (void*)(pointer.start * sizeof(GLuint)));
 }
 
+bool GuichernoEngine::Renderer::isSameVertex(float someVertices[], float otherVertices[], unsigned int vertexIndex, unsigned int otherVertexIndex, unsigned int vertexFloatCount) 
+{
+	for (unsigned int i = 0; i < vertexFloatCount; i++) {
+		if (someVertices[vertexIndex + i] != otherVertices[otherVertexIndex + i]) {
+			return false;
+		}
+	}
+	
+	return true;
+}
+
 GuichernoEngine::BufferPointer GuichernoEngine::Renderer::AddVertices(float verticesToAdd[], unsigned int count) 
 {
 	unsigned int previousIndexCount = indexCount;
 	const int FLOATS_PER_VERTEX = 3;
 
-	for (unsigned int i = 0; i < count; i += 3)
+	for (unsigned int i = 0; i < count; i += FLOATS_PER_VERTEX)
 	{
 		bool isVertexInArray = false;
 
-		float vertex[FLOATS_PER_VERTEX] = { verticesToAdd[i], verticesToAdd[i + 1], verticesToAdd[i + 2] };
-
 		for (unsigned int j = 0; j < vertexCount; j += FLOATS_PER_VERTEX) 
 		{
-			if (
-				vertices[j] == verticesToAdd[i] &&
-				vertices[j + 1] == verticesToAdd[i + 1] &&
-				vertices[j + 2] == verticesToAdd[i + 2]
-				) 
+			if (isSameVertex(vertices, verticesToAdd, j, i, FLOATS_PER_VERTEX)) 
 			{
 				isVertexInArray = true;
 				indices[indexCount] = static_cast<unsigned int>(j / FLOATS_PER_VERTEX);
@@ -192,7 +197,7 @@ GuichernoEngine::BufferPointer GuichernoEngine::Renderer::AddVertices(float vert
 		std::cout << "VERTEX COUNT: " << vertexCount << std::endl;
 
 		for (unsigned int j = 0; j < FLOATS_PER_VERTEX; j++) {
-			vertices[vertexCount] = vertex[j];
+			vertices[vertexCount] = verticesToAdd[i + j];
 			vertexCount++;
 		}
 
