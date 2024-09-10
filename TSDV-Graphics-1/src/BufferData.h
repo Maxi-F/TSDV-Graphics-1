@@ -2,8 +2,6 @@
 
 namespace GuichernoEngine
 {
-	const int MAX_ARRAY_SIZE = 256;
-
 	struct BufferData
 	{
 		unsigned int VBO;
