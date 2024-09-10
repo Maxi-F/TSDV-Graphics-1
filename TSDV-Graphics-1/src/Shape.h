@@ -7,7 +7,7 @@ namespace GuichernoEngine
 {
 	static const unsigned int SHAPE_VERTEX_COUNT = 9;
 
-	class GUICHERNO_API Shape : Entity2D 
+	class GUICHERNO_API Shape : public Entity2D 
 	{
 		public:
 			float vertices[SHAPE_VERTEX_COUNT];

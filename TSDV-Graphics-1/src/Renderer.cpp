@@ -3,6 +3,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+const int MAX_INDEX_COUNT = 256;
+
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "out vec4 vertexColor;\n"
@@ -20,12 +22,6 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "{\n"
 "	FragColor = vertexColor;\n"
 "}\0";
-
-unsigned int GuichernoEngine::Renderer::vertexCount = 0;
-unsigned int GuichernoEngine::Renderer::test = 0;
-unsigned int GuichernoEngine::Renderer::indexCount = 0;
-float GuichernoEngine::Renderer::vertices[];
-unsigned int GuichernoEngine::Renderer::indices[];
 
 void GuichernoEngine::Renderer::Clear()
 {
@@ -108,23 +104,20 @@ void GuichernoEngine::Renderer::GenerateShaders()
 	std::cout << "TEST: " << glGetError() << std::endl;
 }
 
-void GuichernoEngine::Renderer::GenerateBuffer()
+GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count)
 {
 	glewInit();
 
 	GenerateShaders();
 
+	unsigned int indexCount = 0;
+
 	float* verticesToBuffer = new float[vertexCount];
-	unsigned int* indicesToBuffer = new unsigned int[indexCount];
+	unsigned int* indicesToBuffer = GenerateIndices(vertices, vertexCount, count, indexCount);
 
 	for (unsigned int i = 0; i < vertexCount; i++) 
 	{
 		verticesToBuffer[i] = vertices[i];
-	}
-
-	for (unsigned int i = 0; i < indexCount; i++) 
-	{
-		indicesToBuffer[i] = indices[i];
 	}
 
 	unsigned int VBO;
@@ -153,7 +146,10 @@ void GuichernoEngine::Renderer::GenerateBuffer()
 	std::cout << "Set Everything" << std::endl;
 
 	delete[] verticesToBuffer;
-	delete[] indicesToBuffer;
+
+	BufferData bufferData = { VBO, IBO, vertices, indicesToBuffer, vertexCount, indexCount };
+
+	return bufferData;
 }
 
 void GuichernoEngine::Renderer::DrawArrays(BufferPointer pointer)
@@ -161,52 +157,86 @@ void GuichernoEngine::Renderer::DrawArrays(BufferPointer pointer)
 	glDrawElements(GL_TRIANGLES, pointer.quantity, GL_UNSIGNED_INT, (void*)(pointer.start * sizeof(GLuint)));
 }
 
-bool GuichernoEngine::Renderer::isSameVertex(float someVertices[], float otherVertices[], unsigned int vertexIndex, unsigned int otherVertexIndex, unsigned int vertexFloatCount) 
+int GuichernoEngine::Renderer::isSameVertex(float someVertices[], float otherVertices[], unsigned int vertexIndex, unsigned int otherVertexIndex, unsigned int vertexFloatCount) 
 {
-	for (unsigned int i = 0; i < vertexFloatCount; i++) {
-		if (someVertices[vertexIndex + i] != otherVertices[otherVertexIndex + i]) {
-			return false;
+	for (unsigned int i = 0; i < vertexFloatCount; i++) 
+	{
+		if (someVertices[vertexIndex + i] == otherVertices[otherVertexIndex + i]) 
+		{
+			return i;
 		}
 	}
 	
-	return true;
+	return -1;
 }
 
-GuichernoEngine::BufferPointer GuichernoEngine::Renderer::AddVertices(float verticesToAdd[], unsigned int count) 
+unsigned int* GuichernoEngine::Renderer::GenerateIndices(float vertices[], unsigned int vertexCount, unsigned int floatPerVertexCount, unsigned int& indexCount)
 {
-	unsigned int previousIndexCount = indexCount;
-	const int FLOATS_PER_VERTEX = 3;
+	unsigned int* indices = new unsigned int[MAX_INDEX_COUNT];
+	unsigned int uniqueVertexCount = 0;
 
-	for (unsigned int i = 0; i < count; i += FLOATS_PER_VERTEX)
+	for (unsigned int i = 0; i < vertexCount; i += floatPerVertexCount)
 	{
-		bool isVertexInArray = false;
+		int vertexInArrayIndex = -1;
 
-		for (unsigned int j = 0; j < vertexCount; j += FLOATS_PER_VERTEX) 
+		for (unsigned int j = 0; j < i; j++)
 		{
-			if (isSameVertex(vertices, verticesToAdd, j, i, FLOATS_PER_VERTEX)) 
-			{
-				isVertexInArray = true;
-				indices[indexCount] = static_cast<unsigned int>(j / FLOATS_PER_VERTEX);
-				indexCount++;
-			}
+			vertexInArrayIndex = isSameVertex(vertices, vertices, j, i, floatPerVertexCount);
+
+			if (vertexInArrayIndex != -1)
+				break;
 		}
 
-		if (isVertexInArray) 
+		if (vertexInArrayIndex != -1)
+		{
+			indices[i] = static_cast<unsigned int>(vertexInArrayIndex);
 			continue;
-
-		std::cout << "VERTEX COUNT: " << vertexCount << std::endl;
-
-		for (unsigned int j = 0; j < FLOATS_PER_VERTEX; j++) {
-			vertices[vertexCount] = verticesToAdd[i + j];
-			vertexCount++;
+		}
+		else
+		{	
+			indices[i] = uniqueVertexCount;
+			uniqueVertexCount++;
 		}
 
-		indices[indexCount] = test;
 		indexCount++;
-		test++;
 	}
-
-	BufferPointer pointer = { (int)previousIndexCount, (int)indexCount, static_cast<int>(count / FLOATS_PER_VERTEX)};
-
-	return pointer;
 }
+
+//GuichernoEngine::BufferPointer GuichernoEngine::Renderer::AddVertices(float verticesToAdd[], unsigned int count) 
+//{
+//	unsigned int previousIndexCount = indexCount;
+//	const int FLOATS_PER_VERTEX = 3;
+//
+//	for (unsigned int i = 0; i < count; i += FLOATS_PER_VERTEX)
+//	{
+//		bool isVertexInArray = false;
+//
+//		for (unsigned int j = 0; j < vertexCount; j += FLOATS_PER_VERTEX) 
+//		{
+//			if (isSameVertex(vertices, verticesToAdd, j, i, FLOATS_PER_VERTEX)) 
+//			{
+//				isVertexInArray = true;
+//				indices[indexCount] = static_cast<unsigned int>(j / FLOATS_PER_VERTEX);
+//				indexCount++;
+//			}
+//		}
+//
+//		if (isVertexInArray) 
+//			continue;
+//
+//		std::cout << "VERTEX COUNT: " << vertexCount << std::endl;
+//
+//		for (unsigned int j = 0; j < FLOATS_PER_VERTEX; j++) {
+//			vertices[vertexCount] = verticesToAdd[i + j];
+//			vertexCount++;
+//		}
+//
+//		indices[indexCount] = test;
+//		indexCount++;
+//		test++;
+//	}
+//
+//	BufferPointer pointer = { (int)previousIndexCount, (int)indexCount, static_cast<int>(count / FLOATS_PER_VERTEX)};
+//
+//	return pointer;
+//}

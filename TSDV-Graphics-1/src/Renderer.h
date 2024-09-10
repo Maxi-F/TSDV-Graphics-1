@@ -2,28 +2,22 @@
 #include <GLEW/include/glew.h>
 #include "Window.h"
 #include "BufferPointer.h"
+#include "BufferData.h"
 
 namespace GuichernoEngine
 {	
-	const int MAX_VERTEX_COUNT = 1024;
-	const int MAX_INDEX_COUNT = 1024;
-
 	class Renderer
 	{
 
 		private:
-			static float vertices[MAX_VERTEX_COUNT];
-			static unsigned int indices[MAX_INDEX_COUNT];
-			static unsigned int vertexCount;
-			static unsigned int test;
-			static unsigned int indexCount;
 			static void GenerateShaders();
-			static bool isSameVertex(float vertices[], float otherVertices[], unsigned int vertexIndex, unsigned int otherVertexIndex, unsigned int vertexFloatCount);
+			static int isSameVertex(float vertices[], float otherVertices[], unsigned int vertexIndex, unsigned int otherVertexIndex, unsigned int vertexFloatCount);
+			static unsigned int* GenerateIndices(float vertices[], unsigned int vertexCount, unsigned int floatPerVertexCount, unsigned int& indexCount);
 
 		public:
 			static void Clear();
 			static void SwapBuffers(Window window);
-			static void GenerateBuffer();
+			static BufferData GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count);
 			static void DrawArrays(BufferPointer pointer);
 			static BufferPointer AddVertices(float verticesToAdd[], unsigned int count);
 	};

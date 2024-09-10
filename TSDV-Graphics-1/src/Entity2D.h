@@ -3,5 +3,5 @@
 
 namespace GuichernoEngine
 {
-	class Entity2D : Entity {};
+	class Entity2D : public Entity {};
 }
