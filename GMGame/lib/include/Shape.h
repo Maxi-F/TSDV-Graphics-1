@@ -1,19 +1,20 @@
 #pragma once
 #include "Entity2D.h"
-#include "BufferPointer.h"
 #include "ExportHeader.h"
 
 namespace GuichernoEngine 
 {
-	static const int SHAPE_VERTEX_COUNT = 9;
+	static const unsigned int SHAPE_VERTEX_FLOAT_COUNT = 9;
+	static const unsigned int SHAPE_VERTEX_COUNT = 3;
 
-	class GUICHERNO_API Shape : Entity2D 
+	// For now this will be just triangles
+	class GUICHERNO_API Shape : public Entity2D 
 	{
 		public:
-			float vertices[SHAPE_VERTEX_COUNT];
-			BufferPointer bufferPointer;
+			float vertices[SHAPE_VERTEX_FLOAT_COUNT];
 
 			Shape(float vertices[]);
+			~Shape();
 
 			void Draw();
 	};

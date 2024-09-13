@@ -4,19 +4,21 @@
 
 GuichernoEngine::Shape::Shape(float vertices[]) 
 {
-	Renderer renderer;
+	Init(vertices, SHAPE_VERTEX_FLOAT_COUNT, SHAPE_VERTEX_COUNT);
 
-	for (int i = 0; i < SHAPE_VERTEX_COUNT; i++)
+	for (int i = 0; i < SHAPE_VERTEX_FLOAT_COUNT; i++)
 	{
 		this->vertices[i] = vertices[i];
 	}
+}
 
-	this->bufferPointer = renderer.AddVertices(this->vertices, SHAPE_VERTEX_COUNT);
+GuichernoEngine::Shape::~Shape()
+{
 }
 
 void GuichernoEngine::Shape::Draw() 
 {
 	Renderer renderer;
 
-	renderer.DrawArrays(bufferPointer);
+	renderer.DrawElements(this->bufferData);
 }
