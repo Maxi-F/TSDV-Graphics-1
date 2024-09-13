@@ -35,7 +35,7 @@ int BaseGame::StartEngine()
     /* Make the window's context current */
     gmWindow->MakeCurrent();
 
-    gmRenderer->Init();
+    gmRenderer->Init(*gmWindow);
 
     Init();
     

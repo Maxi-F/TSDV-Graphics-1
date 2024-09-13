@@ -36,6 +36,7 @@ void Game::DeInit()
 
 void Game::Update()
 {
+	this->player->Update();
 	this->player->Draw();
 	this->enemy->Draw();
 }
