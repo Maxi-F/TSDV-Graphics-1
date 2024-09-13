@@ -1,17 +1,16 @@
 #pragma once
 #include "BufferData.h"
-#include "Renderer.h"
+#include "ExportHeader.h"
 
 namespace GuichernoEngine 
 {
-	class Entity 
+	class GUICHERNO_API Entity
 	{
 		public:
+			BufferData bufferData = {};
 			void Init(float vertices[], unsigned int vertexCount, unsigned int count);
 
 			virtual void Draw() = 0;
-			BufferData bufferData;
-
-			
+			~Entity();
 	};
 }

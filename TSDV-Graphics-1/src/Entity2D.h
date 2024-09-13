@@ -1,7 +1,11 @@
 #pragma once
 #include "Entity.h"
+#include "ExportHeader.h"
 
 namespace GuichernoEngine
 {
-	class Entity2D : public Entity {};
+	class GUICHERNO_API Entity2D : public Entity 
+	{
+
+	};
 }
