@@ -1,8 +1,9 @@
 #pragma once
+#include "ExportHeader.h"
 
 namespace GuichernoEngine
 {
-	struct BufferData
+	struct GUICHERNO_API BufferData
 	{
 		unsigned int VBO;
 		unsigned int IBO;
