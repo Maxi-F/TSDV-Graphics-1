@@ -50,9 +50,6 @@
     <ClInclude Include="src\Shape.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\BufferPointer.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="src\ExportHeader.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>

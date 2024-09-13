@@ -28,7 +28,6 @@
   <ItemGroup>
     <ClInclude Include="src\BaseGame.h" />
     <ClInclude Include="src\BufferData.h" />
-    <ClInclude Include="src\BufferPointer.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Entity2D.h" />
     <ClInclude Include="src\ExportHeader.h" />

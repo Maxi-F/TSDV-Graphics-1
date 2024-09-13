@@ -35,11 +35,11 @@ int BaseGame::StartEngine()
     /* Make the window's context current */
     gmWindow->MakeCurrent();
 
+    gmRenderer->Init();
+
     Init();
     
     std::cout << "After init game" << std::endl;
-
-    gmRenderer->GenerateBuffer();
 
     StartGame();
 
