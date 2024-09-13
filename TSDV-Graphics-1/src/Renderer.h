@@ -16,9 +16,10 @@ namespace GuichernoEngine
 		public:
 			static void Clear();
 			static void SwapBuffers(Window window);
-			static void Init();
+			static void SetMVP(glm::mat4 proj, glm::mat4 view, glm::mat4 model);
+			static void Init(Window window);
 			static BufferData GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count);
 			static void SetData(BufferData bufferData);
-			static void DrawElements(BufferData bufferData);
+			static void DrawElements(BufferData bufferData, glm::mat4 model);
 	};
 }

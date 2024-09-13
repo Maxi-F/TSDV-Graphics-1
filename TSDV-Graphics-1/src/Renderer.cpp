@@ -23,21 +23,28 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "	FragColor = vertexColor;\n"
 "}\0";
 
+unsigned int shaderProgram;
+glm::mat4 view;
+GuichernoEngine::Window window;
+
 void GuichernoEngine::Renderer::Clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void GuichernoEngine::Renderer::SwapBuffers(Window window)
+void GuichernoEngine::Renderer::SwapBuffers(Window windowToSwap)
 {
-	glfwSwapBuffers(window.GetGLFWwindow());
+	glfwSwapBuffers(windowToSwap.GetGLFWwindow());
 }
 
-void GuichernoEngine::Renderer::Init()
+void GuichernoEngine::Renderer::Init(Window gmWindow)
 {
 	glewInit();
 
 	GenerateShaders();
+
+	view = glm::mat4(1.0f);
+	window = gmWindow;
 }
 
 void GuichernoEngine::Renderer::GenerateShaders()
@@ -78,8 +85,6 @@ void GuichernoEngine::Renderer::GenerateShaders()
 		std::cout << "Compile fragment success..." << std::endl;
 	}
 
-
-	unsigned int shaderProgram;
 	shaderProgram = glCreateProgram();
 
 	glAttachShader(shaderProgram, vertexShader);
@@ -103,12 +108,13 @@ void GuichernoEngine::Renderer::GenerateShaders()
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+}
 
-	glm::mat4x4 proj = glm::ortho(0.0f, 640.0f, 0.0f, 480.0f, -1.0f, 1.0f);
+void GuichernoEngine::Renderer::SetMVP(glm::mat4 proj, glm::mat4 viewToUse, glm::mat4 model)
+{
+	glm::mat4 mvp = proj * viewToUse * model;
 
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "u_MVP"), 1, GL_FALSE, &proj[0][0]);
-
-	std::cout << "TEST: " << glGetError() << std::endl;
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "u_MVP"), 1, GL_FALSE, &mvp[0][0]);
 }
 
 GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count)
@@ -152,9 +158,10 @@ void GuichernoEngine::Renderer::SetData(BufferData bufferData)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * bufferData.indexCount, bufferData.indices, GL_STATIC_DRAW);
 }
 
-void GuichernoEngine::Renderer::DrawElements(BufferData bufferData)
+void GuichernoEngine::Renderer::DrawElements(BufferData bufferData, glm::mat4 model)
 {
 	SetData(bufferData);
+	SetMVP(window.GetProjection(), view, model);
 
 	glDrawElements(GL_TRIANGLES, bufferData.indexCount, GL_UNSIGNED_INT, (void*)0);
 }
