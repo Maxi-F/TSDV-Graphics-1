@@ -7,12 +7,13 @@ const int MAX_INDEX_COUNT = 256;
 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec4 color;\n"
 "out vec4 vertexColor;\n"
 "uniform mat4 u_MVP;\n"
 "void main()\n"
 "{\n"
 "   gl_Position = u_MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"   vertexColor = vec4(0.0f, 1.0f, 0.2f, 1.0f);\n"
+"   vertexColor = color;\n"
 "}\0";
 
 const char* fragmentShaderSource = "#version 330 core\n"
@@ -144,6 +145,10 @@ GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vert
 
 void GuichernoEngine::Renderer::SetData(BufferData bufferData) 
 {
+	const unsigned int POSITION_FLOATS_LENGTH = 3;
+	const unsigned int COLOR_FLOATS_LENGTH = 4;
+	const unsigned int FULL_VERTEX_LENGTH = POSITION_FLOATS_LENGTH + COLOR_FLOATS_LENGTH;
+
 	// Bind the buffer to a buffer type for interpretation.
 	// ARRAY_BUFFER in this case binds it as an array of vertices.
 	glBindBuffer(GL_ARRAY_BUFFER, bufferData.VBO);
@@ -152,8 +157,11 @@ void GuichernoEngine::Renderer::SetData(BufferData bufferData)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * bufferData.vertexCount, bufferData.vertices, GL_STATIC_DRAW);
 
 	// Create the layout for the vertices
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, POSITION_FLOATS_LENGTH, GL_FLOAT, GL_FALSE, FULL_VERTEX_LENGTH * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, COLOR_FLOATS_LENGTH, GL_FLOAT, GL_FALSE, FULL_VERTEX_LENGTH * sizeof(float), (void*)(POSITION_FLOATS_LENGTH * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferData.IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * bufferData.indexCount, bufferData.indices, GL_STATIC_DRAW);
 }
