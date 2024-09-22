@@ -6,19 +6,19 @@
 
 namespace GuichernoEngine 
 {
-	static const unsigned int SHAPE_VERTEX_FLOAT_COUNT = 9;
-	static const unsigned int SHAPE_VERTEX_COUNT = 3;
-
 	// For now this will be just triangles
 	class Shape : public Entity2D 
 	{
 		private: 
 			glm::mat4 model = glm::mat4(1.0f);
+			glm::vec3 GetPivot();
+			unsigned int shapeVertexCount;
+			unsigned int shapeVertexFloatCount;
 
 		public:
-			float vertices[SHAPE_VERTEX_FLOAT_COUNT];
+			float *vertices;
 
-			GUICHERNO_API Shape(float vertices[]);
+			GUICHERNO_API Shape(float vertices[], unsigned int vertexLength, unsigned int arrayLength);
 			GUICHERNO_API ~Shape();
 
 			GUICHERNO_API void Draw();
