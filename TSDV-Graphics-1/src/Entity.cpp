@@ -1,11 +1,11 @@
 #include "Entity.h"
 #include "Renderer.h"
 
-void GuichernoEngine::Entity::Init(float vertices[], unsigned int vertexCount, unsigned int count)
+void GuichernoEngine::Entity::Init(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType)
 {
 	Renderer renderer;
 
-	this->bufferData = renderer.GenerateBuffer(vertices, vertexCount, count);
+	this->bufferData = renderer.GenerateBuffer(vertices, vertexCount, count, shapeType);
 }
 
 GuichernoEngine::Entity::~Entity()

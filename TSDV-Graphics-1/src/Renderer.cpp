@@ -117,7 +117,7 @@ void GuichernoEngine::Renderer::SetMVP(glm::mat4 proj, glm::mat4 viewToUse, glm:
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "u_MVP"), 1, GL_FALSE, &mvp[0][0]);
 }
 
-GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count)
+GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType)
 {
 	unsigned int indexCount = 0;
 	float* verticesToBuffer = new float[vertexCount];
@@ -127,7 +127,7 @@ GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vert
 		verticesToBuffer[i] = vertices[i];
 	}
 
-	unsigned int* indicesToBuffer = GenerateIndices(vertices, vertexCount, count, indexCount);
+	unsigned int* indicesToBuffer = GenerateIndices(vertices, vertexCount, count, indexCount, shapeType);
 
 	unsigned int VBO;
 	// Generate a buffer in VRAM.
@@ -179,9 +179,10 @@ bool GuichernoEngine::Renderer::isSameVertex(float someVertices[], float otherVe
 	return true;
 }
 
-unsigned int* GuichernoEngine::Renderer::GenerateIndices(float vertices[], unsigned int vertexCount, unsigned int floatPerVertexCount, unsigned int& indexCount)
+unsigned int* GuichernoEngine::Renderer::GenerateIndices(float vertices[], unsigned int vertexCount, unsigned int floatPerVertexCount, unsigned int& indexCount, ShapeType shapeType)
 {
-	unsigned int* indices = new unsigned int[MAX_INDEX_COUNT];
+	std::cout << shapeType << std::endl;
+	unsigned int* indices = new unsigned int[MAX_INDEX_COUNT] {};
 	unsigned int uniqueVertexCount = 0;
 
 	for (unsigned int i = 0; i < vertexCount; i += floatPerVertexCount)
@@ -207,6 +208,16 @@ unsigned int* GuichernoEngine::Renderer::GenerateIndices(float vertices[], unsig
 		}
 
 		indexCount++;
+	}
+
+	switch (shapeType) {
+		case TRIANGLE:
+			return indices;
+		case SQUARE:
+			unsigned int* squareIndices = new unsigned int[6] {indices[0], indices[1], indices[2], indices[0], indices[2], indices[3]};
+			indexCount = 6;
+			delete[] indices;
+			return squareIndices;
 	}
 
 	return indices;

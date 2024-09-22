@@ -13,8 +13,8 @@ glm::vec3 GuichernoEngine::Shape::GetPivot()
 		sumY += vertices[i + 1];
 	}
 
-	float xPivot = sumX / this->shapeVertexCount;
-	float yPivot = sumY / this->shapeVertexCount;
+	float xPivot = sumX / (this->shapeVertexFloatCount / this->shapeVertexCount);
+	float yPivot = sumY / (this->shapeVertexFloatCount / this->shapeVertexCount);
 
 	return 
 	{ 
@@ -24,13 +24,13 @@ glm::vec3 GuichernoEngine::Shape::GetPivot()
 	};
 }
 
-GuichernoEngine::Shape::Shape(float vertices[], unsigned int vertexLength, unsigned int arrayLength)
+GuichernoEngine::Shape::Shape(float vertices[], unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType)
 {
 	this->shapeVertexFloatCount = arrayLength;
 	this->shapeVertexCount = vertexLength;
 	this->vertices = new float[this->shapeVertexFloatCount];
 
-	Init(vertices, this->shapeVertexFloatCount, this->shapeVertexCount);
+	Init(vertices, this->shapeVertexFloatCount, this->shapeVertexCount, shapeType);
 
 	for (unsigned int i = 0; i < this->shapeVertexFloatCount; i++)
 	{

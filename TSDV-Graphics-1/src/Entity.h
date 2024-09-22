@@ -1,6 +1,7 @@
 #pragma once
 #include "BufferData.h"
 #include "ExportHeader.h"
+#include "ShapeType.h"
 
 namespace GuichernoEngine 
 {
@@ -8,7 +9,7 @@ namespace GuichernoEngine
 	{
 		public:
 			BufferData bufferData = {};
-			void Init(float vertices[], unsigned int vertexCount, unsigned int count);
+			void Init(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType);
 
 			virtual void Draw() = 0;
 			~Entity();

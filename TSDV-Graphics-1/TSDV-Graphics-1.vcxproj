@@ -33,6 +33,7 @@
     <ClInclude Include="src\ExportHeader.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shape.h" />
+    <ClInclude Include="src\ShapeType.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
