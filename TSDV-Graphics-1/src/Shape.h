@@ -11,8 +11,12 @@ namespace GuichernoEngine
 	class Shape : public Entity2D 
 	{
 		private: 
-			glm::mat4 model = glm::mat4(1.0f);
+			glm::mat4 translation = glm::mat4(1.0f);
+			glm::mat4 rotation = glm::mat4(1.0f);
+			glm::mat4 scale = glm::mat4(1.0f);
+
 			glm::vec3 GetPivot();
+			glm::mat4 GetTRS();
 			unsigned int shapeVertexCount;
 			unsigned int shapeVertexFloatCount;
 
@@ -22,7 +26,10 @@ namespace GuichernoEngine
 			GUICHERNO_API Shape(float vertices[], unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType);
 			GUICHERNO_API ~Shape();
 
+			GUICHERNO_API void Translate(float x, float y, float z);
+			GUICHERNO_API void Rotate(float angle);
+			GUICHERNO_API void Scale(float x, float y, float z);
+
 			GUICHERNO_API void Draw();
-			GUICHERNO_API void Update();
 	};
 }

@@ -24,6 +24,11 @@ glm::vec3 GuichernoEngine::Shape::GetPivot()
 	};
 }
 
+glm::mat4 GuichernoEngine::Shape::GetTRS()
+{
+	return this->scale * this->rotation * this->translation;
+}
+
 GuichernoEngine::Shape::Shape(float vertices[], unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType)
 {
 	this->shapeVertexFloatCount = arrayLength;
@@ -43,20 +48,28 @@ GuichernoEngine::Shape::~Shape()
 		delete[] this->vertices;
 }
 
+void GuichernoEngine::Shape::Translate(float x, float y, float z)
+{
+	this->translation = glm::translate(this->translation, glm::vec3(x, y, z));
+}
+
+void GuichernoEngine::Shape::Rotate(float angle)
+{
+	glm::vec3 pivot = GetPivot();
+
+	this->rotation = glm::translate(this->translation, pivot);
+	this->rotation = glm::rotate(this->rotation, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
+	this->rotation = glm::translate(this->translation, -pivot);
+}
+
+void GuichernoEngine::Shape::Scale(float x, float y, float z)
+{
+	this->scale = glm::scale(this->scale, glm::vec3(x, y, z));
+}
+
 void GuichernoEngine::Shape::Draw() 
 {
 	Renderer renderer;
 
-	renderer.DrawElements(this->bufferData, this->model);
-}
-
-void GuichernoEngine::Shape::Update()
-{
-	glm::vec3 pivot = GetPivot();
-
-	std::cout << pivot.x << " " << pivot.y << std::endl;
-	this->model = glm::mat4(1.0f);
-	this->model = glm::translate(this->model, pivot);
-	this->model = glm::rotate(this->model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-	this->model = glm::translate(this->model, -pivot);
+	renderer.DrawElements(this->bufferData, this->GetTRS());
 }
