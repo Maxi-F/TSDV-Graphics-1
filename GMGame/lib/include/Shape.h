@@ -11,12 +11,13 @@ namespace GuichernoEngine
 	class Shape : public Entity2D 
 	{
 		private: 
-			glm::mat4 translation = glm::mat4(1.0f);
-			glm::mat4 rotation = glm::mat4(1.0f);
-			glm::mat4 scale = glm::mat4(1.0f);
+			glm::mat4 model = glm::mat4(1.0f);
+			glm::vec3 translation = glm::vec3(0.0f);
+			glm::vec3 scale = glm::vec3(1.0f);
+			float rotationDegrees = 0.0f;
 
-			glm::vec3 GetPivot();
-			glm::mat4 GetTRS();
+			void SetTRS();
+			glm::vec4 GetPivot();
 			unsigned int shapeVertexCount;
 			unsigned int shapeVertexFloatCount;
 

@@ -2,12 +2,12 @@
 #include "Renderer.h"
 #include <iostream>
 
-glm::vec3 GuichernoEngine::Shape::GetPivot()
+glm::vec4 GuichernoEngine::Shape::GetPivot()
 {
 	float sumX = 0.0f;
 	float sumY = 0.0f;
 
-	for(unsigned int i = 0; i < this->shapeVertexFloatCount; i += this->shapeVertexCount)
+	for (unsigned int i = 0; i < this->shapeVertexFloatCount; i += this->shapeVertexCount)
 	{
 		sumX += vertices[i];
 		sumY += vertices[i + 1];
@@ -16,17 +16,28 @@ glm::vec3 GuichernoEngine::Shape::GetPivot()
 	float xPivot = sumX / (this->shapeVertexFloatCount / this->shapeVertexCount);
 	float yPivot = sumY / (this->shapeVertexFloatCount / this->shapeVertexCount);
 
-	return 
-	{ 
-		xPivot, 
-		yPivot, 
-		0.0f 
+	return
+	{
+		xPivot,
+		yPivot,
+		0.0f,
+		1.0f
 	};
 }
 
-glm::mat4 GuichernoEngine::Shape::GetTRS()
+void GuichernoEngine::Shape::SetTRS()
 {
-	return this->scale * this->rotation * this->translation;
+	this->model = glm::mat4(1.0f);
+	this->model = glm::translate(this->model, this->translation);
+	
+	glm::vec4 pivot = GetPivot();
+
+	this->model = glm::translate(this->model, glm::vec3(pivot.x, pivot.y, pivot.z));
+
+	this->model = glm::rotate(this->model, glm::radians(this->rotationDegrees), glm::vec3(0.0f, 0.0f, 1.0f));
+	this->model = glm::scale(this->model, this->scale);
+
+	this->model = glm::translate(this->model, glm::vec3(-pivot.x, -pivot.y, -pivot.z));
 }
 
 GuichernoEngine::Shape::Shape(float vertices[], unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType)
@@ -50,26 +61,23 @@ GuichernoEngine::Shape::~Shape()
 
 void GuichernoEngine::Shape::Translate(float x, float y, float z)
 {
-	this->translation = glm::translate(this->translation, glm::vec3(x, y, z));
+	this->translation += glm::vec3(x, y, z);
 }
 
 void GuichernoEngine::Shape::Rotate(float angle)
 {
-	glm::vec3 pivot = GetPivot();
-
-	this->rotation = glm::translate(this->translation, pivot);
-	this->rotation = glm::rotate(this->rotation, glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
-	this->rotation = glm::translate(this->translation, -pivot);
+	this->rotationDegrees += angle;
 }
 
 void GuichernoEngine::Shape::Scale(float x, float y, float z)
 {
-	this->scale = glm::scale(this->scale, glm::vec3(x, y, z));
+	this->scale = glm::vec3(x, y, z);
 }
 
 void GuichernoEngine::Shape::Draw() 
 {
 	Renderer renderer;
+	this->SetTRS();
 
-	renderer.DrawElements(this->bufferData, this->GetTRS());
+	renderer.DrawElements(this->bufferData, this->model);
 }

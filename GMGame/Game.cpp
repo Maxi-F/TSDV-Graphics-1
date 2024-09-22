@@ -40,9 +40,10 @@ void Game::DeInit()
 
 void Game::Update()
 {
-	this->player->Rotate(1.0f);
-	this->player->Translate(1.0f, 0.0f, 0.0f);
+	this->player->Rotate(4.0f);
+	this->player->Translate(1.0f, 1.0f, 0.0f);
+	this->player->Scale(1.0f, 2.0f, 1.0f);
 	//this->enemy->Rotate(2.0f);
 	this->player->Draw();
-	this->enemy->Draw();
+	// this->enemy->Draw();
 }
