@@ -31,6 +31,10 @@ namespace GuichernoEngine
 			GUICHERNO_API void Rotate(float angle);
 			GUICHERNO_API void Scale(float x, float y, float z);
 
+			GUICHERNO_API void SetTranslate(float x, float y, float z);
+			GUICHERNO_API void SetRotate(float angle);
+			GUICHERNO_API void SetScale(float x, float y, float z);
+
 			GUICHERNO_API void Draw();
 	};
 }

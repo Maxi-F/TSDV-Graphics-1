@@ -62,22 +62,42 @@ GuichernoEngine::Shape::~Shape()
 void GuichernoEngine::Shape::Translate(float x, float y, float z)
 {
 	this->translation += glm::vec3(x, y, z);
+	this->SetTRS();
 }
 
 void GuichernoEngine::Shape::Rotate(float angle)
 {
 	this->rotationDegrees += angle;
+	this->SetTRS();
 }
 
 void GuichernoEngine::Shape::Scale(float x, float y, float z)
 {
+	this->scale += glm::vec3(x, y, z);
+	this->SetTRS();
+}
+
+void GuichernoEngine::Shape::SetTranslate(float x, float y, float z)
+{
+	this->translation = glm::vec3(x, y, z);
+	this->SetTRS();
+}
+
+void GuichernoEngine::Shape::SetRotate(float angle)
+{
+	this->rotationDegrees = angle;
+	this->SetTRS();
+}
+
+void GuichernoEngine::Shape::SetScale(float x, float y, float z)
+{
 	this->scale = glm::vec3(x, y, z);
+	this->SetTRS();
 }
 
 void GuichernoEngine::Shape::Draw() 
 {
 	Renderer renderer;
-	this->SetTRS();
 
 	renderer.DrawElements(this->bufferData, this->model);
 }
