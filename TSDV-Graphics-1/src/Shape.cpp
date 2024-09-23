@@ -97,9 +97,14 @@ void GuichernoEngine::Shape::SetScale(float x, float y, float z)
 	this->SetTRS();
 }
 
+void GuichernoEngine::Shape::SetColor(Color aColor)
+{
+	this->color = aColor;
+}
+
 void GuichernoEngine::Shape::Draw() 
 {
 	Renderer renderer;
 
-	renderer.DrawElements(this->bufferData, this->model);
+	renderer.DrawElements(this->bufferData, this->model, this->color);
 }

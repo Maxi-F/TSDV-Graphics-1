@@ -9,11 +9,12 @@ const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "layout (location = 1) in vec4 color;\n"
 "out vec4 vertexColor;\n"
+"uniform vec4 u_Tint;\n"
 "uniform mat4 u_MVP;\n"
 "void main()\n"
 "{\n"
 "   gl_Position = u_MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"   vertexColor = color;\n"
+"   vertexColor = u_Tint * color;\n"
 "}\0";
 
 const char* fragmentShaderSource = "#version 330 core\n"
@@ -118,6 +119,12 @@ void GuichernoEngine::Renderer::SetMVP(glm::mat4 proj, glm::mat4 viewToUse, glm:
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "u_MVP"), 1, GL_FALSE, &mvp[0][0]);
 }
 
+void GuichernoEngine::Renderer::SetColor(Color tint)
+{
+	glm::vec4 tintToUse = glm::vec4(tint.r, tint.g, tint.b, tint.a);
+	glUniform4fv(glGetUniformLocation(shaderProgram, "u_Tint"), 1, &tintToUse[0]);
+}
+
 GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType)
 {
 	unsigned int indexCount = 0;
@@ -166,10 +173,11 @@ void GuichernoEngine::Renderer::SetData(BufferData bufferData)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * bufferData.indexCount, bufferData.indices, GL_STATIC_DRAW);
 }
 
-void GuichernoEngine::Renderer::DrawElements(BufferData bufferData, glm::mat4 model)
+void GuichernoEngine::Renderer::DrawElements(BufferData bufferData, glm::mat4 model, Color tint)
 {
 	SetData(bufferData);
 	SetMVP(window.GetProjection(), view, model);
+	SetColor(tint);
 
 	glDrawElements(GL_TRIANGLES, bufferData.indexCount, GL_UNSIGNED_INT, (void*)0);
 }

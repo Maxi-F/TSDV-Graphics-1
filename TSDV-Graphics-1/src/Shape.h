@@ -4,6 +4,7 @@
 #include "ShapeType.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Colors.h"
 
 namespace GuichernoEngine 
 {
@@ -15,6 +16,7 @@ namespace GuichernoEngine
 			glm::vec3 translation = glm::vec3(0.0f);
 			glm::vec3 scale = glm::vec3(1.0f);
 			float rotationDegrees = 0.0f;
+			Color color;
 
 			void SetTRS();
 			glm::vec4 GetPivot();
@@ -34,6 +36,7 @@ namespace GuichernoEngine
 			GUICHERNO_API void SetTranslate(float x, float y, float z);
 			GUICHERNO_API void SetRotate(float angle);
 			GUICHERNO_API void SetScale(float x, float y, float z);
+			GUICHERNO_API void SetColor(Color color);
 
 			GUICHERNO_API void Draw();
 	};

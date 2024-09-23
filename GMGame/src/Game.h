@@ -11,8 +11,8 @@ class Game : public GuichernoEngine::BaseGame
 private:
 
 public:
-	GuichernoEngine::Shape* player;
-	GuichernoEngine::Shape* enemy;
+	GuichernoEngine::Square* player;
+	GuichernoEngine::Triangle* enemy;
 
 	Game();
 	~Game();
