@@ -22,9 +22,9 @@ namespace GuichernoEngine
 			unsigned int shapeVertexFloatCount;
 
 		public:
-			float *vertices;
+			float *vertices;	
 
-			GUICHERNO_API Shape(float vertices[], unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType);
+			GUICHERNO_API Shape(float* vertices, unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType);
 			GUICHERNO_API ~Shape();
 
 			GUICHERNO_API void Translate(float x, float y, float z);

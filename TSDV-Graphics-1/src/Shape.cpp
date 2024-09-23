@@ -40,7 +40,7 @@ void GuichernoEngine::Shape::SetTRS()
 	this->model = glm::translate(this->model, glm::vec3(-pivot.x, -pivot.y, -pivot.z));
 }
 
-GuichernoEngine::Shape::Shape(float vertices[], unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType)
+GuichernoEngine::Shape::Shape(float* vertices, unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType)
 {
 	this->shapeVertexFloatCount = arrayLength;
 	this->shapeVertexCount = vertexLength;
@@ -52,6 +52,8 @@ GuichernoEngine::Shape::Shape(float vertices[], unsigned int vertexLength, unsig
 	{
 		this->vertices[i] = vertices[i];
 	}
+
+	delete[] vertices;
 }
 
 GuichernoEngine::Shape::~Shape()
