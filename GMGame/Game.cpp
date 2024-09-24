@@ -1,41 +1,37 @@
 #include "Game.h"
 #include "ShapeType.h"
 
-Game::Game() {
-	this->player = nullptr;
-	this->enemy = nullptr;
+Game::Game() 
+{
+	yellowTriangle = nullptr;
+	pinkTriangle = nullptr;
 }
 
-Game::~Game() {
-
+Game::~Game() 
+{
 }
 
 void Game::Init()
 {
-	this->player = new GuichernoEngine::Square(50.0f, 25.0f, 150.0f, 175.0f, GuichernoEngine::RED);
+	yellowTriangle = new GuichernoEngine::Triangle(75.0f, 350.0f, 150.0f, 175.0f, GuichernoEngine::YELLOW);
 
-	//// TODO
-	//float* verticesEnemy = new float[21] {
-	//	0.0f, 0.5f, 0.0f,  1.0f, 1.0f , 1.0f, 1.0f,
-	//	0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f,
-	//	-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f
-	//};
-
-	this->enemy = new GuichernoEngine::Triangle(250.0f, 250.0f, 150.0f, 175.0f, GuichernoEngine::RED);
+	pinkTriangle = new GuichernoEngine::Triangle(560.0f, 75.0f, 150.0f, 175.0f, GuichernoEngine::MAGENTA);
 }
 
 void Game::DeInit()
 {
-	delete this->player;
-	delete this->enemy;
+	delete yellowTriangle;
+	delete pinkTriangle;
 }
 
 void Game::Update()
-{
-	this->player->Rotate(4.0f);
-	this->player->Scale(0.01f, 1.0f, 1.0f);
-	this->player->Translate(1.0f, 1.0f, 0.0f);
+{	
+	yellowTriangle->Translate(0.0f, -1.0f, 0.0f);
+	pinkTriangle->Translate(0.0f, 1.0f, 0.0f);
 
-	this->player->Draw();
-	this->enemy->Draw();
+	yellowTriangle->Rotate(4.0f);
+	pinkTriangle->Rotate(-4.0f);
+
+	yellowTriangle->Draw();	
+	pinkTriangle->Draw();
 }
