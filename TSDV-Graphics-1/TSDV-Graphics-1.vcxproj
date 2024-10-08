@@ -34,6 +34,7 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Entity2D.h" />
     <ClInclude Include="src\ExportHeader.h" />
+    <ClInclude Include="src\Keys.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shape.h" />
     <ClInclude Include="src\ShapeType.h" />
