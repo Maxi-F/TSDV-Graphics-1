@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "ShapeType.h"
-
+#include "Keys.h"
 Game::Game() {
 	this->player = nullptr;
 	this->enemy = nullptr;
@@ -32,7 +32,9 @@ void Game::DeInit()
 
 void Game::Update()
 {
-	this->player->Rotate(4.0f);
+	if (this->IsKeyPressed(GuichernoEngine::Keys::W)) {
+		this->player->Rotate(4.0f);
+	}
 	this->player->Scale(0.01f, 1.0f, 1.0f);
 	this->player->Translate(1.0f, 1.0f, 0.0f);
 

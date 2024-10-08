@@ -1,6 +1,7 @@
 #include "BaseGame.h"
 #include "Window.h"
 #include "Renderer.h"
+#include "Input.h"
 #include <iostream>
 
 using namespace GuichernoEngine;
@@ -35,6 +36,7 @@ int BaseGame::StartEngine()
     /* Make the window's context current */
     gmWindow->MakeCurrent();
 
+    GuichernoEngine::Input::SetWindow(gmWindow);
     gmRenderer->Init(*gmWindow);
 
     Init();
@@ -73,5 +75,10 @@ int GuichernoEngine::BaseGame::StartGame()
     delete gmRenderer;
 
     return 0;
+}
+
+bool GuichernoEngine::BaseGame::IsKeyPressed(Keys key)
+{
+    return GuichernoEngine::Input::IsKeyPressed(key);
 }
 
