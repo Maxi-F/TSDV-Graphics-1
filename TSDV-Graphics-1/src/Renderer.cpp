@@ -1,31 +1,12 @@
 #include "Renderer.h"
 #include "iostream"
+#include "Shader.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 const int MAX_INDEX_COUNT = 256;
 
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"layout (location = 1) in vec4 color;\n"
-"out vec4 vertexColor;\n"
-"uniform vec4 u_Tint;\n"
-"uniform mat4 u_MVP;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = u_MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"   vertexColor = u_Tint * color;\n"
-"}\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-"in vec4 vertexColor;\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"	FragColor = vertexColor;\n"
-"}\0";
-
-unsigned int shaderProgram;
+GuichernoEngine::Shader shader;
 glm::mat4 view;
 GuichernoEngine::Window window;
 
@@ -51,78 +32,22 @@ void GuichernoEngine::Renderer::Init(Window gmWindow)
 
 void GuichernoEngine::Renderer::GenerateShaders()
 {
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	int success;
-	char infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-	else {
-		std::cout << "Compile vertex success..." << std::endl;
-	}
-
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	int fragmentSuccess;
-	char fragmentInfoLog[512];
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fragmentSuccess);
-
-	if (!fragmentSuccess)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, fragmentInfoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << fragmentInfoLog << std::endl;
-	}
-	else {
-		std::cout << "Compile fragment success..." << std::endl;
-	}
-
-	shaderProgram = glCreateProgram();
-
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	int linkSuccess;
-	char linkInfoLog[512];
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linkSuccess);
-
-	if (!linkSuccess)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, linkInfoLog);
-		std::cout << "ERROR::PROGRAM::LINK_FAILED\n" << linkInfoLog << std::endl;
-	}
-	else {
-		std::cout << "Link shaders success..." << std::endl;
-	}
-
-	glUseProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	shader = Shader("shaders/color.vert", "shaders/color.frag");
+	shader.Use();
 }
 
 void GuichernoEngine::Renderer::SetMVP(glm::mat4 proj, glm::mat4 viewToUse, glm::mat4 model)
 {
 	glm::mat4 mvp = proj * viewToUse * model;
 
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "u_MVP"), 1, GL_FALSE, &mvp[0][0]);
+	shader.SetMat4("u_MVP", mvp);
 }
 
 void GuichernoEngine::Renderer::SetColor(Color tint)
 {
 	glm::vec4 tintToUse = glm::vec4(tint.r, tint.g, tint.b, tint.a);
-	glUniform4fv(glGetUniformLocation(shaderProgram, "u_Tint"), 1, &tintToUse[0]);
+
+	shader.SetVec4("u_Tint", tintToUse);
 }
 
 GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType)
