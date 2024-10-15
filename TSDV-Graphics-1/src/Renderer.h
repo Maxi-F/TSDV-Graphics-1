@@ -21,12 +21,15 @@ namespace GuichernoEngine
 			static void SetMVP(glm::mat4 proj, glm::mat4 view, glm::mat4 model, ShaderType type);
 			static void SetColor(Color tint, ShaderType type);
 
+			static void SetDataForShapeShader(BufferData bufferData);
+			static void SetDataForTextureShader(BufferData bufferData);
+
 		public:
 			static void Clear();
 			static void SwapBuffers(Window window);
 			static void Init(Window window);
 			static BufferData GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType);
-			static void SetData(BufferData bufferData);
-			static void DrawElements(BufferData bufferData, glm::mat4 model, Color tint, ShaderType type);
+			static void SetData(BufferData bufferData, ShaderType type);
+			static void DrawElements(BufferData bufferData, glm::mat4 model, Color tint, ShaderType type, int texture);
 	};
 }

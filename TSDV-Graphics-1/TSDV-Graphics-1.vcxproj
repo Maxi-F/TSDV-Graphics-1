@@ -27,6 +27,7 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Shape.cpp" />
+    <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\Square.cpp" />
     <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -53,6 +54,8 @@
     <None Include="cpp.hint" />
     <None Include="src\shaders\color.frag" />
     <None Include="src\shaders\color.vert" />
+    <None Include="src\shaders\texture.frag" />
+    <None Include="src\shaders\texture.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

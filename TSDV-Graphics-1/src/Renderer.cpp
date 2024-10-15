@@ -32,8 +32,11 @@ void GuichernoEngine::Renderer::Init(Window gmWindow)
 
 void GuichernoEngine::Renderer::GenerateShaders()
 { 
-	Shader shader = Shader("shaders/color.vert", "shaders/color.frag", ShaderType::Shape);
-	Shaders[static_cast<int>(ShaderType::Shape)] = shader;
+	Shader colorShader = Shader("shaders/color.vert", "shaders/color.frag", ShaderType::Shape);
+	Shader textureShader = Shader("shaders/texture.vert", "shaders/texture.frag", ShaderType::Texture);
+
+	Shaders[static_cast<int>(ShaderType::Shape)] = colorShader;
+	Shaders[static_cast<int>(ShaderType::Texture)] = textureShader;
 }
 
 void GuichernoEngine::Renderer::SetMVP(glm::mat4 proj, glm::mat4 viewToUse, glm::mat4 model, ShaderType shaderType)
@@ -50,32 +53,7 @@ void GuichernoEngine::Renderer::SetColor(Color tint, ShaderType shaderType)
 	Shaders[static_cast<int>(shaderType)].SetVec4("u_Tint", tintToUse);
 }
 
-GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType)
-{
-	unsigned int indexCount = 0;
-	float* verticesToBuffer = new float[vertexCount];
-
-	for (unsigned int i = 0; i < vertexCount; i++)
-	{
-		verticesToBuffer[i] = vertices[i];
-	}
-
-	unsigned int* indicesToBuffer = GenerateIndices(vertices, vertexCount, count, indexCount, shapeType);
-
-	unsigned int VBO;
-	// Generate a buffer in VRAM.
-	glGenBuffers(1, &VBO);
-	// Bind element buffer for indices
-	unsigned int IBO;
-	glGenBuffers(1, &IBO);
-
-	BufferData bufferData = { VBO, IBO, verticesToBuffer, indicesToBuffer, vertexCount, indexCount };
-	SetData(bufferData);
-
-	return bufferData;
-}
-
-void GuichernoEngine::Renderer::SetData(BufferData bufferData) 
+void GuichernoEngine::Renderer::SetDataForShapeShader(BufferData bufferData)
 {
 	const unsigned int POSITION_FLOATS_LENGTH = 3;
 	const unsigned int COLOR_FLOATS_LENGTH = 4;
@@ -98,15 +76,85 @@ void GuichernoEngine::Renderer::SetData(BufferData bufferData)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * bufferData.indexCount, bufferData.indices, GL_STATIC_DRAW);
 }
 
-void GuichernoEngine::Renderer::DrawElements(BufferData bufferData, glm::mat4 model, Color tint, ShaderType type)
+void GuichernoEngine::Renderer::SetDataForTextureShader(BufferData bufferData)
+{
+	const unsigned int POSITION_FLOATS_LENGTH = 3;
+	const unsigned int COLOR_FLOATS_LENGTH = 4;
+	const unsigned int TEXTURE_FLOATS_LENGTH = 2;
+	const unsigned int FULL_VERTEX_LENGTH = POSITION_FLOATS_LENGTH + COLOR_FLOATS_LENGTH + TEXTURE_FLOATS_LENGTH;
+
+	// Bind the buffer to a buffer type for interpretation.
+	// ARRAY_BUFFER in this case binds it as an array of vertices.
+	glBindBuffer(GL_ARRAY_BUFFER, bufferData.VBO);
+
+	// Set data on the buffer.
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * bufferData.vertexCount, bufferData.vertices, GL_STATIC_DRAW);
+
+	// Create the layout for the vertices
+	glVertexAttribPointer(0, POSITION_FLOATS_LENGTH, GL_FLOAT, GL_FALSE, FULL_VERTEX_LENGTH * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, COLOR_FLOATS_LENGTH, GL_FLOAT, GL_FALSE, FULL_VERTEX_LENGTH * sizeof(float), (void*)(POSITION_FLOATS_LENGTH * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, TEXTURE_FLOATS_LENGTH, GL_FLOAT, GL_FALSE, FULL_VERTEX_LENGTH * sizeof(float), (void*)((POSITION_FLOATS_LENGTH + COLOR_FLOATS_LENGTH) * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferData.IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * bufferData.indexCount, bufferData.indices, GL_STATIC_DRAW);
+}
+
+GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType)
+{
+	unsigned int indexCount = 0;
+	float* verticesToBuffer = new float[vertexCount];
+
+	for (unsigned int i = 0; i < vertexCount; i++)
+	{
+		verticesToBuffer[i] = vertices[i];
+	}
+
+	unsigned int* indicesToBuffer = GenerateIndices(vertices, vertexCount, count, indexCount, shapeType);
+
+	unsigned int VBO;
+	// Generate a buffer in VRAM.
+	glGenBuffers(1, &VBO);
+	// Bind element buffer for indices
+	unsigned int IBO;
+	glGenBuffers(1, &IBO);
+
+	BufferData bufferData = { VBO, IBO, verticesToBuffer, indicesToBuffer, vertexCount, indexCount };
+
+	return bufferData;
+}
+
+void GuichernoEngine::Renderer::SetData(BufferData bufferData, ShaderType type) 
+{
+	switch (type) {
+		case ShaderType::Shape:
+			SetDataForShapeShader(bufferData);
+			break;
+		case ShaderType::Texture:
+			SetDataForTextureShader(bufferData);
+			break;
+	}
+}
+
+void GuichernoEngine::Renderer::DrawElements(BufferData bufferData, glm::mat4 model, Color tint, ShaderType type, int texture)
 {
 	Shaders[static_cast<int>(type)].Use();
 
-	SetData(bufferData);
+	SetData(bufferData, type);
 	SetMVP(window.GetProjection(), view, model, type);
 	SetColor(tint, type);
 
-	glDrawElements(GL_TRIANGLES, bufferData.indexCount, GL_UNSIGNED_INT, (void*)0);
+	switch (type) {
+		case ShaderType::Shape:
+			glDrawElements(GL_TRIANGLES, bufferData.indexCount, GL_UNSIGNED_INT, (void*)0);
+			break;
+		case ShaderType::Texture:
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glDrawElements(GL_TRIANGLES, bufferData.indexCount, GL_UNSIGNED_INT, (void*)0);
+			break;
+	}
 }
 
 bool GuichernoEngine::Renderer::isSameVertex(float someVertices[], float otherVertices[], unsigned int vertexIndex, unsigned int otherVertexIndex, unsigned int vertexFloatCount) 

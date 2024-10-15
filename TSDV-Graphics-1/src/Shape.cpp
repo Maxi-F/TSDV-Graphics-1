@@ -15,5 +15,5 @@ void GuichernoEngine::Shape::Draw()
 {
 	Renderer renderer;
 
-	renderer.DrawElements(this->bufferData, this->model, this->color, ShaderType::Shape);
+	renderer.DrawElements(this->bufferData, this->model, this->color, ShaderType::Shape, 0);
 }
