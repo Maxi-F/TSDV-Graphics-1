@@ -40,6 +40,7 @@
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\ShaderType.h" />
     <ClInclude Include="src\Shape.h" />
     <ClInclude Include="src\ShapeType.h" />
     <ClInclude Include="src\Square.h" />

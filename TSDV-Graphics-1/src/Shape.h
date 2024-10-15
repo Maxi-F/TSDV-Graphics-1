@@ -8,7 +8,6 @@
 
 namespace GuichernoEngine 
 {
-	// For now this will be just triangles
 	class Shape : public Entity2D 
 	{
 		private: 

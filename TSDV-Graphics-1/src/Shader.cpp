@@ -8,9 +8,9 @@ GuichernoEngine::Shader::Shader()
 {
 }
 
-GuichernoEngine::Shader::Shader(const char* vertexPath, const char* fragmentPath)
+GuichernoEngine::Shader::Shader(const char* vertexPath, const char* fragmentPath, ShaderType type)
 {
-    CreateShader(vertexPath, fragmentPath);
+    CreateShader(vertexPath, fragmentPath, type);
 }
 
 void GuichernoEngine::Shader::Use()
@@ -28,8 +28,10 @@ void GuichernoEngine::Shader::SetVec4(const std::string& name, const glm::vec4& 
 	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &vec[0]);
 }
 
-void GuichernoEngine::Shader::CreateShader(const char* vertexPath, const char* fragmentPath)
+void GuichernoEngine::Shader::CreateShader(const char* vertexPath, const char* fragmentPath, ShaderType type)
 {
+    shaderType = type;
+
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;

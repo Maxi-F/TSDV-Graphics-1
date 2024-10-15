@@ -6,9 +6,9 @@
 
 const int MAX_INDEX_COUNT = 256;
 
-GuichernoEngine::Shader shader;
 glm::mat4 view;
 GuichernoEngine::Window window;
+std::map<int, GuichernoEngine::Shader> GuichernoEngine::Renderer::Shaders;
 
 void GuichernoEngine::Renderer::Clear()
 {
@@ -31,23 +31,23 @@ void GuichernoEngine::Renderer::Init(Window gmWindow)
 }
 
 void GuichernoEngine::Renderer::GenerateShaders()
-{
-	shader = Shader("shaders/color.vert", "shaders/color.frag");
-	shader.Use();
+{ 
+	Shader shader = Shader("shaders/color.vert", "shaders/color.frag", ShaderType::Shape);
+	Shaders[static_cast<int>(ShaderType::Shape)] = shader;
 }
 
-void GuichernoEngine::Renderer::SetMVP(glm::mat4 proj, glm::mat4 viewToUse, glm::mat4 model)
+void GuichernoEngine::Renderer::SetMVP(glm::mat4 proj, glm::mat4 viewToUse, glm::mat4 model, ShaderType shaderType)
 {
 	glm::mat4 mvp = proj * viewToUse * model;
 
-	shader.SetMat4("u_MVP", mvp);
+	Shaders[static_cast<int>(shaderType)].SetMat4("u_MVP", mvp);
 }
 
-void GuichernoEngine::Renderer::SetColor(Color tint)
+void GuichernoEngine::Renderer::SetColor(Color tint, ShaderType shaderType)
 {
 	glm::vec4 tintToUse = glm::vec4(tint.r, tint.g, tint.b, tint.a);
 
-	shader.SetVec4("u_Tint", tintToUse);
+	Shaders[static_cast<int>(shaderType)].SetVec4("u_Tint", tintToUse);
 }
 
 GuichernoEngine::BufferData GuichernoEngine::Renderer::GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType)
@@ -98,11 +98,13 @@ void GuichernoEngine::Renderer::SetData(BufferData bufferData)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * bufferData.indexCount, bufferData.indices, GL_STATIC_DRAW);
 }
 
-void GuichernoEngine::Renderer::DrawElements(BufferData bufferData, glm::mat4 model, Color tint)
+void GuichernoEngine::Renderer::DrawElements(BufferData bufferData, glm::mat4 model, Color tint, ShaderType type)
 {
+	Shaders[static_cast<int>(type)].Use();
+
 	SetData(bufferData);
-	SetMVP(window.GetProjection(), view, model);
-	SetColor(tint);
+	SetMVP(window.GetProjection(), view, model, type);
+	SetColor(tint, type);
 
 	glDrawElements(GL_TRIANGLES, bufferData.indexCount, GL_UNSIGNED_INT, (void*)0);
 }

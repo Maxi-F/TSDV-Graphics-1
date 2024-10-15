@@ -1,6 +1,7 @@
 #include "Shape.h"
 #include "Renderer.h"
 #include <iostream>
+#include "ShaderType.h"
 
 glm::vec4 GuichernoEngine::Shape::GetPivot()
 {
@@ -106,5 +107,5 @@ void GuichernoEngine::Shape::Draw()
 {
 	Renderer renderer;
 
-	renderer.DrawElements(this->bufferData, this->model, this->color);
+	renderer.DrawElements(this->bufferData, this->model, this->color, ShaderType::Shape);
 }
