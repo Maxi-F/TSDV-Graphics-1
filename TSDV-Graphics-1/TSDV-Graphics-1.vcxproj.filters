@@ -54,6 +54,9 @@
     <ClCompile Include="src\Sprite.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\TextureImporter.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BaseGame.h">
@@ -105,6 +108,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\RectangleData.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureImporter.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
