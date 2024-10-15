@@ -40,6 +40,7 @@
     <ClInclude Include="src\ExportHeader.h" />
     <ClInclude Include="src\Keys.h" />
     <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\RectangleData.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\ShaderType.h" />

@@ -14,15 +14,15 @@ float* GuichernoEngine::Square::CreateSquareVertices()
 	};
 }
 
-GuichernoEngine::Square::Square(float x, float y, float width, float height, Color color) :
+GuichernoEngine::Square::Square(RectangleData data, Color color) :
 	Shape(
 		CreateSquareVertices(),
 		SQUARE_VERTEX_LENGTH, SQUARE_ARRAY_LENGTH,
 		ShapeType::SQUARE
 	)
 {
-	this->SetTranslate(x, y, 0.0f);
-	this->SetScale(width, height, 1.0f);
+	this->SetTranslate(data.x, data.y, 0.0f);
+	this->SetScale(data.width, data.height, 1.0f);
 	this->SetColor(color);
 }
 

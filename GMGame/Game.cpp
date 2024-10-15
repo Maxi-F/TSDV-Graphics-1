@@ -6,6 +6,7 @@
 Game::Game() {
 	this->player = nullptr;
 	this->enemy = nullptr;
+	this->sprite = nullptr;
 }
 
 Game::~Game() {
@@ -14,20 +15,17 @@ Game::~Game() {
 
 void Game::Init()
 {
-	this->player = new GuichernoEngine::Square(50.0f, 25.0f, 150.0f, 175.0f, GuichernoEngine::RED);
+	this->player = new GuichernoEngine::Square({ 50.0f, 25.0f, 150.0f, 175.0f }, GuichernoEngine::RED);
 
 	this->enemy = new GuichernoEngine::Triangle(250.0f, 250.0f, 150.0f, 175.0f, GuichernoEngine::RED);
 
-	// TODO handle this better
-	float* vertices = new float[36] {
-		// positions          // colors                 // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 0.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 0.0f,   0.0f, 1.0f    // top left 
-	};
-
-	this->sprite = new GuichernoEngine::Sprite(vertices, 9, 36, GuichernoEngine::ShapeType::SQUARE);
+	this->sprite = GuichernoEngine::Sprite::FromRectangle(
+		"images/container.jpg",
+		{ 
+			200.0f, 200.0f, 200.0f, 200.0f 
+		}, 
+		GuichernoEngine::WHITE
+	);
 }
 
 void Game::DeInit()
@@ -44,7 +42,8 @@ void Game::Update()
 	}
 	this->player->Scale(0.01f, 1.0f, 1.0f);
 	this->player->Translate(1.0f, 1.0f, 0.0f);
-	this->sprite->Scale(0.1f, 0.1f, 0.1f);
 
 	this->sprite->Draw();
+	this->player->Draw();
+	this->enemy->Draw();
 }

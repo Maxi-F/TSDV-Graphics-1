@@ -1,6 +1,7 @@
 #pragma once
 #include "Shape.h"
 #include "Colors.h"
+#include "RectangleData.h"
 
 namespace GuichernoEngine
 {
@@ -10,7 +11,7 @@ namespace GuichernoEngine
 			static float* CreateSquareVertices();
 
 		public:
-			GUICHERNO_API Square(float x, float y, float width, float length, Color color);
+			GUICHERNO_API Square(RectangleData data, Color color);
 			GUICHERNO_API ~Square();
 	};
 }
