@@ -9,11 +9,11 @@ const unsigned int SQUARE_ARRAY_LENGTH = 36;
 float* GuichernoEngine::Sprite::CreateSquareVertices()
 {
 	return new float[SQUARE_ARRAY_LENGTH] {
-			// position         // color                // texture
-			-0.5, -0.5, 0.0f,	1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5, -0.5, 0.0f,	1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-			0.5, 0.5, 0.0f,		1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-			-0.5, 0.5, 0.0f,	1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
+			// position          // color               // texture
+		    0.5f, 0.5f, 0.0f,   1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // top right
+			0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // bottom right
+			-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // bottom left
+			-0.5f, 0.5f, 0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f // top left 
 		};
 }
 
@@ -23,6 +23,7 @@ GuichernoEngine::Sprite* GuichernoEngine::Sprite::FromRectangle(const char* file
 
 	sprite->SetTranslate(data.x, data.y, 0.0f);
 	sprite->SetScale(data.width, data.height, 1.0f);
+	sprite->SetRotate(0.0f);
 	sprite->SetColor(color);
 
 	return sprite;
@@ -34,13 +35,50 @@ GuichernoEngine::Sprite::Sprite(const char* filePath, float* vertices, unsigned 
 	TextureImporter::Import(filePath, this->texture);
 }
 
+int GuichernoEngine::Sprite::GetTextureWidth()
+{
+	return this->texture.width;
+}
+
+int GuichernoEngine::Sprite::GetTextureHeight()
+{
+	return this->texture.height;
+}
+
 GuichernoEngine::Sprite::~Sprite()
 {
+}
+
+void GuichernoEngine::Sprite::SetUvCoords(UvCoords topLeftUvCoords, UvCoords bottomRightUvCoords)
+{
+	const unsigned int FIRST_VERTEX_U = 7;
+	const unsigned int FIRST_VERTEX_V = 8;
+
+	const unsigned int SECOND_VERTEX_U = 16;
+	const unsigned int SECOND_VERTEX_V = 17;
+
+	const unsigned int THIRD_VERTEX_U = 25;
+	const unsigned int THIRD_VERTEX_V = 26;
+
+	const unsigned int FOURTH_VERTEX_U = 34;
+	const unsigned int FOURTH_VERTEX_V = 35;
+
+	this->bufferData.vertices[FIRST_VERTEX_U] = bottomRightUvCoords.u;
+	this->bufferData.vertices[FIRST_VERTEX_V] = topLeftUvCoords.v;
+	
+	this->bufferData.vertices[SECOND_VERTEX_U] = bottomRightUvCoords.u;
+	this->bufferData.vertices[SECOND_VERTEX_V] = bottomRightUvCoords.v;
+
+	this->bufferData.vertices[THIRD_VERTEX_U] = topLeftUvCoords.u;
+	this->bufferData.vertices[THIRD_VERTEX_V] = bottomRightUvCoords.v;
+
+	this->bufferData.vertices[FOURTH_VERTEX_U] = topLeftUvCoords.u;
+	this->bufferData.vertices[FOURTH_VERTEX_V] = topLeftUvCoords.v;
 }
 
 void GuichernoEngine::Sprite::Draw()
 {
 	Renderer renderer;
 
-	renderer.DrawElements(this->bufferData, this->model, this->color, ShaderType::Texture, this->texture);
+	renderer.DrawElements(this->bufferData, this->model, this->color, ShaderType::Texture, this->texture.ID);
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity2D.h"
 #include "RectangleData.h"
+#include "TextureData.h"
+#include "UvCoords.h"
 
 namespace GuichernoEngine 
 {
@@ -10,10 +12,13 @@ namespace GuichernoEngine
 			static float* CreateSquareVertices();
 
 		public:
-			unsigned int texture;
+			TextureData texture;
 			GUICHERNO_API static Sprite* FromRectangle(const char* filePath, RectangleData data, Color color);
 			GUICHERNO_API Sprite(const char* filePath, float* vertices, unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType);
+			GUICHERNO_API int GetTextureWidth();
+			GUICHERNO_API int GetTextureHeight();
 			GUICHERNO_API ~Sprite();
+			void SetUvCoords(UvCoords topLeftUvCoords, UvCoords bottomRightUvCoords);
 
 			GUICHERNO_API void Draw();
 	};

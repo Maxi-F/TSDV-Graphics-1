@@ -6,6 +6,7 @@
 #include "Triangle.h"
 #include "Sprite.h"
 #include "Colors.h"
+#include "Animation.h"
 
 class Game : public GuichernoEngine::BaseGame
 {
@@ -15,6 +16,8 @@ public:
 	GuichernoEngine::Square* player;
 	GuichernoEngine::Triangle* enemy;
 	GuichernoEngine::Sprite* sprite;
+	GuichernoEngine::Animation* idleAnimation;
+	GuichernoEngine::Animation* walkAnimation;
 
 	Game();
 	~Game();
