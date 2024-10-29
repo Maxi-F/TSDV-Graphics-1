@@ -28,18 +28,16 @@ void Game::Init()
 	);
 
 	this->idleAnimation = new GuichernoEngine::Animation(
-		this->sprite,
 		{ 34, 438 },
-		31,
-		31,
+		{ 31, 31, },
+		{ this->sprite->GetTextureWidth(), this->sprite->GetTextureHeight() },
 		1
 	);
 
 	this->walkAnimation = new GuichernoEngine::Animation(
-		this->sprite,
 		{ 1, 438 },
-		31,
-		31,
+		{ 31, 31, },
+		{ this->sprite->GetTextureWidth(), this->sprite->GetTextureHeight() },
 		3
 	);
 }
@@ -63,13 +61,15 @@ void Game::Update()
 	this->player->Draw();
 	this->enemy->Draw();
 	
-	// this->sprite->Draw();
+
 	if(this->IsKeyPressed(GuichernoEngine::Keys::D)) 
 	{
-		this->walkAnimation->DrawFrame();
+		this->sprite->SetAnimation(this->walkAnimation);
 	}
 	else 
 	{
-		this->idleAnimation->DrawFrame();
+		this->sprite->SetAnimation(this->idleAnimation);
 	}
+
+	this->sprite->Draw();
 }

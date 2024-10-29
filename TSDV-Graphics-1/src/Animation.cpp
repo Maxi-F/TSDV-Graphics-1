@@ -1,20 +1,18 @@
 #include "Animation.h"
 
 GuichernoEngine::Animation::Animation(
-	Sprite* sprite,
 	Coords startCoords,
-	int frameWidth,
-	int frameHeight,
+	Area frameArea,
+	Area textureArea,
 	int framesQuantity
 )
 {
-	this->sprite = sprite;
 	this->currentFrame = 0;
 
-	float frameWidthFloat = static_cast<float>(frameWidth);
-	float frameHeightFloat = static_cast<float>(frameHeight);
-	float textureWidth = static_cast<float>(sprite->GetTextureWidth());
-	float textureHeight = static_cast<float>(sprite->GetTextureHeight());
+	float frameWidthFloat = static_cast<float>(frameArea.width);
+	float frameHeightFloat = static_cast<float>(frameArea.height);
+	float textureWidth = static_cast<float>(textureArea.width);
+	float textureHeight = static_cast<float>(textureArea.height);
 
 	UvCoords startUVCoords = {
 		startCoords.x / textureWidth,
@@ -46,15 +44,9 @@ GuichernoEngine::Animation::~Animation()
 	frames.clear();
 }
 
-void GuichernoEngine::Animation::DrawFrame()
+GuichernoEngine::Frame GuichernoEngine::Animation::GetCurrentFrame()
 {
-	// this->frames[this->currentFrame].Draw();
-	this->sprite->SetUvCoords(
-		this->frames[this->currentFrame].topLeftUVCoords,
-		this->frames[this->currentFrame].bottomRightUVCoords
-	);
-
-	this->sprite->Draw();
+	return this->frames[this->currentFrame];
 }
 
 void GuichernoEngine::Animation::NextFrame()

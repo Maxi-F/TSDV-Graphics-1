@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\Area.h" />
     <ClInclude Include="src\BaseGame.h" />
     <ClInclude Include="src\BufferData.h" />
     <ClInclude Include="src\Coords.h" />

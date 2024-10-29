@@ -25,6 +25,20 @@ GuichernoEngine::Sprite* GuichernoEngine::Sprite::FromRectangle(const char* file
 	sprite->SetScale(data.width, data.height, 1.0f);
 	sprite->SetRotate(0.0f);
 	sprite->SetColor(color);
+	sprite->SetAnimation(nullptr);
+
+	return sprite;
+}
+
+GuichernoEngine::Sprite* GuichernoEngine::Sprite::FromRectangle(const char* filePath, RectangleData data, Animation* animation, Color color)
+{
+	Sprite* sprite = new Sprite(filePath, CreateSquareVertices(), SQUARE_VERTEX_LENGTH, SQUARE_ARRAY_LENGTH, ShapeType::SQUARE);
+
+	sprite->SetTranslate(data.x, data.y, 0.0f);
+	sprite->SetScale(data.width, data.height, 1.0f);
+	sprite->SetRotate(0.0f);
+	sprite->SetColor(color);
+	sprite->SetAnimation(animation);
 
 	return sprite;
 }
@@ -47,6 +61,11 @@ int GuichernoEngine::Sprite::GetTextureHeight()
 
 GuichernoEngine::Sprite::~Sprite()
 {
+}
+
+void GuichernoEngine::Sprite::SetAnimation(Animation* anAnimation)
+{
+	this->animation = anAnimation;
 }
 
 void GuichernoEngine::Sprite::SetUvCoords(UvCoords topLeftUvCoords, UvCoords bottomRightUvCoords)
@@ -78,6 +97,11 @@ void GuichernoEngine::Sprite::SetUvCoords(UvCoords topLeftUvCoords, UvCoords bot
 
 void GuichernoEngine::Sprite::Draw()
 {
+	if (this->animation) {
+		Frame frame = this->animation->GetCurrentFrame();
+		this->SetUvCoords(frame.topLeftUVCoords, frame.bottomRightUVCoords);
+	}
+
 	Renderer renderer;
 
 	renderer.DrawElements(this->bufferData, this->model, this->color, ShaderType::Texture, this->texture.ID);

@@ -26,6 +26,9 @@ void GuichernoEngine::Renderer::Init(Window gmWindow)
 
 	GenerateShaders();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	view = glm::mat4(1.0f);
 	window = gmWindow;
 }
