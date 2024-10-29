@@ -26,6 +26,7 @@ namespace GuichernoEngine
 
 		public:
 			static void Clear();
+			static float GetGlTime();
 			static void SwapBuffers(Window window);
 			static void Init(Window window);
 			static BufferData GenerateBuffer(float vertices[], unsigned int vertexCount, unsigned int count, ShapeType shapeType);

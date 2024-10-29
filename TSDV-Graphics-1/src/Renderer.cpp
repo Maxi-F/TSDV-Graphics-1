@@ -15,6 +15,11 @@ void GuichernoEngine::Renderer::Clear()
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+float GuichernoEngine::Renderer::GetGlTime()
+{
+	return static_cast<float>(glfwGetTime());
+}
+
 void GuichernoEngine::Renderer::SwapBuffers(Window windowToSwap)
 {
 	glfwSwapBuffers(windowToSwap.GetGLFWwindow());
