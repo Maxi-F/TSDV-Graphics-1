@@ -7,8 +7,8 @@ namespace GuichernoEngine
 	class GUICHERNO_API Frame
 	{
 		public:
-			UvCoords topLeftUVCoords;
-			UvCoords bottomRightUVCoords;
+			UvCoords leftTopUVCoords;
+			UvCoords rightBottomUvCoords;
 			Frame(UvCoords topLeftUVCoords, UvCoords bottomRightUVCoords);
 			~Frame();
 	};

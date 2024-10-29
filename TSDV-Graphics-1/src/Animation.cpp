@@ -1,13 +1,17 @@
 #include "Animation.h"
+#include "GETime.h"
 
 GuichernoEngine::Animation::Animation(
 	Coords startCoords,
 	Area frameArea,
 	Area textureArea,
-	int framesQuantity
+	int framesQuantity,
+	float animationTime
 )
 {
 	this->currentFrame = 0;
+	this->currentTime = 0.0f;
+	this->animationTime = animationTime;
 
 	float frameWidthFloat = static_cast<float>(frameArea.width);
 	float frameHeightFloat = static_cast<float>(frameArea.height);
@@ -23,19 +27,19 @@ GuichernoEngine::Animation::Animation(
 
 	for (int i = 0; i < framesQuantity; i++)
 	{
-		UvCoords topLeftUVCoords =
+		UvCoords leftTopUVCoords =
 		{
 			startUVCoords.u + ((i * frameWidthFloat) / textureWidth),
 			startUVCoords.v
 		};
 
-		UvCoords bottomRightUVCoords =
+		UvCoords rightBottomUVCoords =
 		{
-			topLeftUVCoords.u + ((frameWidthFloat + (i * frameWidthFloat)) / textureWidth),
-			topLeftUVCoords.v - (frameHeightFloat / textureHeight)
+			startUVCoords.u + frameWidthFloat / textureWidth + ((i * frameWidthFloat) / textureWidth),
+			startUVCoords.v - (frameHeightFloat / textureHeight)
 		};
 
-		this->frames.push_back(Frame(topLeftUVCoords, bottomRightUVCoords));
+		this->frames.push_back(Frame(leftTopUVCoords, rightBottomUVCoords));
 	}
 }
 
@@ -49,11 +53,28 @@ GuichernoEngine::Frame GuichernoEngine::Animation::GetCurrentFrame()
 	return this->frames[this->currentFrame];
 }
 
+void GuichernoEngine::Animation::Update()
+{
+	this->currentTime += GETime::deltaTime;
+
+	while (this->currentTime >= this->animationTime)
+		this->currentTime -= this->animationTime;
+
+	float frameTime = this->animationTime / static_cast<float>(this->frames.size());
+
+	this->currentFrame = static_cast<int>(this->currentTime / frameTime);
+}
+
 void GuichernoEngine::Animation::NextFrame()
 {
 	this->currentFrame++;
-	if(this->currentFrame >= this->frames.size())
+	if (this->currentFrame >= this->frames.size())
 	{
 		this->currentFrame = 0;
 	}
+}
+
+void GuichernoEngine::Animation::ResetTime()
+{
+	this->currentTime = 0;
 }

@@ -2,8 +2,8 @@
 
 GuichernoEngine::Frame::Frame(UvCoords topLeftUVCoords, UvCoords bottomRightUVCoords)
 {
-	this->topLeftUVCoords = topLeftUVCoords;
-	this->bottomRightUVCoords = bottomRightUVCoords;
+	this->leftTopUVCoords = topLeftUVCoords;
+	this->rightBottomUvCoords = bottomRightUVCoords;
 }
 
 GuichernoEngine::Frame::~Frame()

@@ -17,7 +17,7 @@ void Game::Init()
 {
 	this->player = new GuichernoEngine::Square({ 50.0f, 25.0f, 150.0f, 175.0f }, GuichernoEngine::RED);
 
-	this->enemy = new GuichernoEngine::Triangle(250.0f, 250.0f, 150.0f, 175.0f, GuichernoEngine::RED);
+	this->enemy = new GuichernoEngine::Triangle(200.0f, 50.0f, 800.0f, 800.0f, GuichernoEngine::RED);
 
 	this->sprite = GuichernoEngine::Sprite::FromRectangle(
 		"images/omori.png",
@@ -29,16 +29,18 @@ void Game::Init()
 
 	this->idleAnimation = new GuichernoEngine::Animation(
 		{ 34, 438 },
-		{ 31, 31, },
+		{ 33, 32, },
 		{ this->sprite->GetTextureWidth(), this->sprite->GetTextureHeight() },
-		1
+		1,
+		100.0f
 	);
 
 	this->walkAnimation = new GuichernoEngine::Animation(
 		{ 1, 438 },
-		{ 31, 31, },
+		{ 33, 32, },
 		{ this->sprite->GetTextureWidth(), this->sprite->GetTextureHeight() },
-		3
+		3,
+		0.8f
 	);
 }
 
@@ -57,6 +59,7 @@ void Game::Update()
 	}
 	this->player->Scale(0.01f, 1.0f, 1.0f);
 	this->player->Translate(1.0f, 1.0f, 0.0f);
+	this->sprite->Update();
 
 	this->player->Draw();
 	this->enemy->Draw();

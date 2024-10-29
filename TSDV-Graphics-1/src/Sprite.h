@@ -22,6 +22,7 @@ namespace GuichernoEngine
 			GUICHERNO_API int GetTextureHeight();
 			GUICHERNO_API ~Sprite();
 			GUICHERNO_API void SetAnimation(Animation* animation);
+			GUICHERNO_API void Update();
 			void SetUvCoords(UvCoords topLeftUvCoords, UvCoords bottomRightUvCoords);
 
 			GUICHERNO_API void Draw();

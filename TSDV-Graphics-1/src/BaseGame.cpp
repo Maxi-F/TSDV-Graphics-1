@@ -1,8 +1,10 @@
+#include <iostream>
+
+#include "GETime.h"
 #include "BaseGame.h"
 #include "Window.h"
 #include "Renderer.h"
 #include "Input.h"
-#include <iostream>
 
 using namespace GuichernoEngine;
 
@@ -55,6 +57,9 @@ int GuichernoEngine::BaseGame::StartGame()
     /* Loop until the user closes the window */
     while (!gmWindow->ShouldClose())
     {
+        GETime::SetDeltaTime();
+        std::cout << GETime::deltaTime << std::endl;
+
         /* Render here */
         gmRenderer->Clear();
         

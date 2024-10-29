@@ -9,13 +9,20 @@ namespace GuichernoEngine
 {
 	class Animation
 	{
+		private:
+			float currentTime;
+			float animationTime;
+
 		public:
 			std::vector<Frame> frames;
 			unsigned int currentFrame;
-			GUICHERNO_API Animation(Coords startCoords, Area frameArea, Area textureArea, int framesQuantity);
-			GUICHERNO_API ~Animation();
-			Frame GetCurrentFrame();
 
+			GUICHERNO_API Animation(Coords startCoords, Area frameArea, Area textureArea, int framesQuantity, float animationTime);
+			GUICHERNO_API ~Animation();
+			GUICHERNO_API void Update();
 			GUICHERNO_API void NextFrame();
+			void ResetTime();
+			
+			Frame GetCurrentFrame();
 	};
 }

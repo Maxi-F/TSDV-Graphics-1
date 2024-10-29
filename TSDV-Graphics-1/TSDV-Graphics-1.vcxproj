@@ -32,6 +32,7 @@
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\Square.cpp" />
     <ClCompile Include="src\TextureImporter.cpp" />
+    <ClCompile Include="src\GETime.cpp" />
     <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
@@ -57,6 +58,7 @@
     <ClInclude Include="src\Square.h" />
     <ClInclude Include="src\TextureData.h" />
     <ClInclude Include="src\TextureImporter.h" />
+    <ClInclude Include="src\GETime.h" />
     <ClInclude Include="src\Triangle.h" />
     <ClInclude Include="src\UvCoords.h" />
     <ClInclude Include="src\Window.h" />

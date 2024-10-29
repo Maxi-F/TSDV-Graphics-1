@@ -65,10 +65,22 @@ GuichernoEngine::Sprite::~Sprite()
 
 void GuichernoEngine::Sprite::SetAnimation(Animation* anAnimation)
 {
+	if (this->animation == anAnimation) return;
+
+	if(this->animation)
+		this->animation->ResetTime();
+	
 	this->animation = anAnimation;
 }
 
-void GuichernoEngine::Sprite::SetUvCoords(UvCoords topLeftUvCoords, UvCoords bottomRightUvCoords)
+void GuichernoEngine::Sprite::Update()
+{
+	if (!this->animation) return;
+
+	this->animation->Update();
+}
+
+void GuichernoEngine::Sprite::SetUvCoords(UvCoords leftTopUvCoords, UvCoords rightBottomUvCoords)
 {
 	const unsigned int FIRST_VERTEX_U = 7;
 	const unsigned int FIRST_VERTEX_V = 8;
@@ -82,24 +94,24 @@ void GuichernoEngine::Sprite::SetUvCoords(UvCoords topLeftUvCoords, UvCoords bot
 	const unsigned int FOURTH_VERTEX_U = 34;
 	const unsigned int FOURTH_VERTEX_V = 35;
 
-	this->bufferData.vertices[FIRST_VERTEX_U] = bottomRightUvCoords.u;
-	this->bufferData.vertices[FIRST_VERTEX_V] = topLeftUvCoords.v;
+	this->bufferData.vertices[FIRST_VERTEX_U] = rightBottomUvCoords.u;
+	this->bufferData.vertices[FIRST_VERTEX_V] = leftTopUvCoords.v;
 	
-	this->bufferData.vertices[SECOND_VERTEX_U] = bottomRightUvCoords.u;
-	this->bufferData.vertices[SECOND_VERTEX_V] = bottomRightUvCoords.v;
+	this->bufferData.vertices[SECOND_VERTEX_U] = rightBottomUvCoords.u;
+	this->bufferData.vertices[SECOND_VERTEX_V] = rightBottomUvCoords.v;
 
-	this->bufferData.vertices[THIRD_VERTEX_U] = topLeftUvCoords.u;
-	this->bufferData.vertices[THIRD_VERTEX_V] = bottomRightUvCoords.v;
+	this->bufferData.vertices[THIRD_VERTEX_U] = leftTopUvCoords.u;
+	this->bufferData.vertices[THIRD_VERTEX_V] = rightBottomUvCoords.v;
 
-	this->bufferData.vertices[FOURTH_VERTEX_U] = topLeftUvCoords.u;
-	this->bufferData.vertices[FOURTH_VERTEX_V] = topLeftUvCoords.v;
+	this->bufferData.vertices[FOURTH_VERTEX_U] = leftTopUvCoords.u;
+	this->bufferData.vertices[FOURTH_VERTEX_V] = leftTopUvCoords.v;
 }
 
 void GuichernoEngine::Sprite::Draw()
 {
 	if (this->animation) {
 		Frame frame = this->animation->GetCurrentFrame();
-		this->SetUvCoords(frame.topLeftUVCoords, frame.bottomRightUVCoords);
+		this->SetUvCoords(frame.leftTopUVCoords, frame.rightBottomUvCoords);
 	}
 
 	Renderer renderer;
