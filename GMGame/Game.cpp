@@ -27,6 +27,14 @@ void Game::Init()
 		GuichernoEngine::WHITE
 	);
 
+	this->library = GuichernoEngine::Sprite::FromRectangle(
+		"images/container.jpg",
+		{
+			200.0f, 200.0f, 300.0f, 300.0f
+		},
+		GuichernoEngine::WHITE
+	);
+
 	this->idleAnimation = new GuichernoEngine::Animation(
 		{ 34, 438 },
 		{ 33, 32, },
@@ -63,6 +71,7 @@ void Game::Update()
 
 	this->player->Draw();
 	this->enemy->Draw();
+	this->library->Draw();
 	
 
 	if(this->IsKeyPressed(GuichernoEngine::Keys::D)) 

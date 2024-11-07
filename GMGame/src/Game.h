@@ -16,6 +16,7 @@ public:
 	GuichernoEngine::Square* player;
 	GuichernoEngine::Triangle* enemy;
 	GuichernoEngine::Sprite* sprite;
+	GuichernoEngine::Sprite* library;
 	GuichernoEngine::Animation* idleAnimation;
 	GuichernoEngine::Animation* walkAnimation;
 

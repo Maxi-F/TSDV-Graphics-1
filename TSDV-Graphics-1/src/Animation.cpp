@@ -41,6 +41,8 @@ GuichernoEngine::Animation::Animation(
 
 		this->frames.push_back(Frame(leftTopUVCoords, rightBottomUVCoords));
 	}
+
+	this->frameTime = this->animationTime / static_cast<float>(this->frames.size());
 }
 
 GuichernoEngine::Animation::~Animation()
@@ -60,9 +62,7 @@ void GuichernoEngine::Animation::Update()
 	while (this->currentTime >= this->animationTime)
 		this->currentTime -= this->animationTime;
 
-	float frameTime = this->animationTime / static_cast<float>(this->frames.size());
-
-	this->currentFrame = static_cast<int>(this->currentTime / frameTime);
+	this->currentFrame = static_cast<int>(this->currentTime / this->frameTime);
 }
 
 void GuichernoEngine::Animation::NextFrame()

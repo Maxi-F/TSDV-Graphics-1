@@ -12,6 +12,7 @@ namespace GuichernoEngine
 		private:
 			float currentTime;
 			float animationTime;
+			float frameTime;
 
 		public:
 			std::vector<Frame> frames;

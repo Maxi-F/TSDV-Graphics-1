@@ -58,7 +58,6 @@ int GuichernoEngine::BaseGame::StartGame()
     while (!gmWindow->ShouldClose())
     {
         GETime::SetDeltaTime();
-        std::cout << GETime::deltaTime << std::endl;
 
         /* Render here */
         gmRenderer->Clear();
