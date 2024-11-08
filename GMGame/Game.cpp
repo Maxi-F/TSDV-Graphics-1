@@ -1,7 +1,9 @@
 #include "Game.h"
 #include "ShapeType.h"
 #include "Keys.h"
+#include "CollisionManager.h"
 #include "Sprite.h"
+#include "GETime.h"
 
 Game::Game() {
 	this->player = nullptr;
@@ -15,9 +17,14 @@ Game::~Game() {
 
 void Game::Init()
 {
-	this->player = new GuichernoEngine::Square({ 50.0f, 25.0f, 150.0f, 175.0f }, GuichernoEngine::RED);
+	// 320, 240
 
-	this->enemy = new GuichernoEngine::Triangle(200.0f, 50.0f, 800.0f, 800.0f, GuichernoEngine::RED);
+	// center this
+	this->player = new GuichernoEngine::Square({
+		320.0f, 240.0f, 100.0f, 100.0f
+		}, GuichernoEngine::RED);
+
+	this->enemy = new GuichernoEngine::Triangle(320.0f, 240.0f, 100.0f, 86.0f, GuichernoEngine::YELLOW);
 
 	this->sprite = GuichernoEngine::Sprite::FromRectangle(
 		"images/omori.png",
@@ -63,16 +70,30 @@ void Game::Update()
 {
 	if (this->IsKeyPressed(GuichernoEngine::Keys::W)) 
 	{
-		this->player->Rotate(4.0f);
+		this->player->Rotate(4.0f * GuichernoEngine::GETime::deltaTime);
 	}
-	this->player->Scale(0.01f, 1.0f, 1.0f);
-	this->player->Translate(1.0f, 1.0f, 0.0f);
+	this->enemy->Rotate(20.0f * GuichernoEngine::GETime::deltaTime);
+	// this->enemy->Scale(20.0f * GuichernoEngine::GETime::deltaTime, 20.0f * GuichernoEngine::GETime::deltaTime, 1.0f);
+	
+	GuichernoEngine::Square({
+		320.0f, 240.0f, 100.0f, 100.0f
+		}, GuichernoEngine::BLUE).Draw();
+	// this->player->Translate(0, -10.0f * GuichernoEngine::GETime::deltaTime, 0.0f);
 	this->sprite->Update();
 
-	this->player->Draw();
+	// this->player->Draw();
 	this->enemy->Draw();
-	this->library->Draw();
+	// this->library->Draw();
 	
+
+	if(GuichernoEngine::CollisionManager::CheckCollision(this->player, this->enemy)) 
+	{
+		std::cout << "Collision detected" << std::endl;
+	}
+	else {
+		std::cout << "No collision detected" << std::endl;
+	}
+
 
 	if(this->IsKeyPressed(GuichernoEngine::Keys::D)) 
 	{
@@ -83,5 +104,5 @@ void Game::Update()
 		this->sprite->SetAnimation(this->idleAnimation);
 	}
 
-	this->sprite->Draw();
+	// this->sprite->Draw();
 }

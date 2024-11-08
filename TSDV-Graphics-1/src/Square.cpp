@@ -20,9 +20,10 @@ GuichernoEngine::Square::Square(RectangleData data, Color color) :
 		SQUARE_VERTEX_LENGTH, SQUARE_ARRAY_LENGTH,
 		ShapeType::SQUARE
 	)
-{
+{	
 	this->SetTranslate(data.x, data.y, 0.0f);
 	this->SetScale(data.width, data.height, 1.0f);
+
 	this->SetColor(color);
 }
 

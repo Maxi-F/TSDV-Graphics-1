@@ -1,5 +1,6 @@
 #include "Entity2D.h"
-
+#include "Colors.h"
+#include <iostream>
 
 glm::vec4 GuichernoEngine::Entity2D::GetPivot()
 {
@@ -41,6 +42,8 @@ void GuichernoEngine::Entity2D::SetTRS()
 
 GuichernoEngine::Entity2D::Entity2D(float* vertices, unsigned int vertexLength, unsigned int arrayLength, ShapeType shapeType)
 {
+	this->collider = { 0, 0, 0, 0 };
+	this->color = WHITE;
 	this->entityVertexFloatCount = arrayLength;
 	this->entityVertexCount = vertexLength;
 	this->vertices = new float[this->entityVertexFloatCount];
@@ -64,6 +67,8 @@ void GuichernoEngine::Entity2D::Translate(float x, float y, float z)
 {
 	this->translation += glm::vec3(x, y, z);
 	this->SetTRS();
+
+	this->ResetCollider();
 }
 
 void GuichernoEngine::Entity2D::Rotate(float angle)
@@ -76,12 +81,37 @@ void GuichernoEngine::Entity2D::Scale(float x, float y, float z)
 {
 	this->scale += glm::vec3(x, y, z);
 	this->SetTRS();
+
+	std::cout << "Scale: " << this->scale.x << ", " << this->scale.y << std::endl;
+
+	this->ResetCollider();
+
 }
 
 void GuichernoEngine::Entity2D::SetTranslate(float x, float y, float z)
 {
 	this->translation = glm::vec3(x, y, z);
 	this->SetTRS();
+
+	this->collider = {
+		x - (this->collider.width / 2.0f),
+		y - (this->collider.height / 2.0f),
+		this->collider.width,
+		this->collider.height
+	};
+
+	this->ResetCollider();
+
+}
+
+void GuichernoEngine::Entity2D::ResetCollider()
+{
+	this->collider = {
+		this->translation.x - (this->scale.x / 2.0f),
+		this->translation.y - (this->scale.y / 2.0f),
+		this->scale.x,
+		this->scale.y
+	};
 }
 
 void GuichernoEngine::Entity2D::SetRotate(float angle)
@@ -94,9 +124,22 @@ void GuichernoEngine::Entity2D::SetScale(float x, float y, float z)
 {
 	this->scale = glm::vec3(x, y, z);
 	this->SetTRS();
+
+	this->ResetCollider();
+
 }
 
 void GuichernoEngine::Entity2D::SetColor(Color aColor)
 {
 	this->color = aColor;
+}
+
+GuichernoEngine::Collider GuichernoEngine::Entity2D::GetCollider()
+{
+	return this->collider;
+}
+
+void GuichernoEngine::Entity2D::SetCollider(Collider aCollider)
+{
+	this->collider = aCollider;
 }

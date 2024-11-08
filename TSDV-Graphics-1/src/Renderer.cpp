@@ -180,7 +180,6 @@ bool GuichernoEngine::Renderer::isSameVertex(float someVertices[], float otherVe
 
 unsigned int* GuichernoEngine::Renderer::GenerateIndices(float vertices[], unsigned int vertexCount, unsigned int floatPerVertexCount, unsigned int& indexCount, ShapeType shapeType)
 {
-	std::cout << shapeType << std::endl;
 	unsigned int* indices = new unsigned int[MAX_INDEX_COUNT] {};
 	unsigned int uniqueVertexCount = 0;
 

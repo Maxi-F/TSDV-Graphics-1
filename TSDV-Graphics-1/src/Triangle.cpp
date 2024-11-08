@@ -22,6 +22,7 @@ GuichernoEngine::Triangle::Triangle(float x, float y, float baseLength, float he
 {
 	this->SetTranslate(x, y, 0.0f);
 	this->SetScale(baseLength, height, 1.0f);
+
 	this->SetColor(color);
 }
 

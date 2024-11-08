@@ -21,8 +21,16 @@ GuichernoEngine::Sprite* GuichernoEngine::Sprite::FromRectangle(const char* file
 {
 	Sprite* sprite = new Sprite(filePath, CreateSquareVertices(), SQUARE_VERTEX_LENGTH, SQUARE_ARRAY_LENGTH, ShapeType::SQUARE);
 
+	sprite->collider = {
+		data.x,
+		data.y,
+		data.width,
+		data.height
+	};
+
 	sprite->SetTranslate(data.x, data.y, 0.0f);
 	sprite->SetScale(data.width, data.height, 1.0f);
+	
 	sprite->SetRotate(0.0f);
 	sprite->SetColor(color);
 	sprite->SetAnimation(nullptr);

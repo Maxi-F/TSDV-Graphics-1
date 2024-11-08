@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\BaseGame.cpp" />
+    <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\Colors.h" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Entity2D.cpp" />
@@ -41,6 +42,8 @@
     <ClInclude Include="src\Area.h" />
     <ClInclude Include="src\BaseGame.h" />
     <ClInclude Include="src\BufferData.h" />
+    <ClInclude Include="src\Collider.h" />
+    <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\Coords.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Entity2D.h" />
