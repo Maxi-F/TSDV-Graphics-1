@@ -24,7 +24,7 @@ void Game::Init()
 		320.0f, 240.0f, 100.0f, 100.0f
 		}, GuichernoEngine::RED);
 
-	this->enemy = new GuichernoEngine::Triangle(320.0f, 240.0f, 100.0f, 86.0f, GuichernoEngine::YELLOW);
+	this->enemy = new GuichernoEngine::Triangle(320.0f, 240.0f, 100.0f, 100.0f, GuichernoEngine::YELLOW);
 
 	this->sprite = GuichernoEngine::Sprite::FromRectangle(
 		"images/omori.png",
@@ -73,6 +73,7 @@ void Game::Update()
 		this->player->Rotate(4.0f * GuichernoEngine::GETime::deltaTime);
 	}
 	this->enemy->Rotate(20.0f * GuichernoEngine::GETime::deltaTime);
+	this->enemy->Translate(0, -20.0f * GuichernoEngine::GETime::deltaTime, 0.0f);
 	// this->enemy->Scale(20.0f * GuichernoEngine::GETime::deltaTime, 20.0f * GuichernoEngine::GETime::deltaTime, 1.0f);
 	
 	GuichernoEngine::Square({
@@ -104,5 +105,5 @@ void Game::Update()
 		this->sprite->SetAnimation(this->idleAnimation);
 	}
 
-	// this->sprite->Draw();
+	this->sprite->Draw();
 }

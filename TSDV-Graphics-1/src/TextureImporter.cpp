@@ -25,6 +25,12 @@ void GuichernoEngine::TextureImporter::Import(const char* fileName, TextureData 
 	GLenum format;
 	
 	switch (nrChannels) {
+		case 1:
+			format = GL_RED;
+			break;
+		case 2:
+			format = GL_RG;
+			break;
 		case 3:
 			format = GL_RGB;
 			break;
@@ -37,7 +43,14 @@ void GuichernoEngine::TextureImporter::Import(const char* fileName, TextureData 
 
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, format, textureData.width, textureData.height, 0, format, GL_UNSIGNED_BYTE, data);
+		if (format == GL_RGB) {
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, textureData.width, textureData.height, 0, format, GL_UNSIGNED_BYTE, data);
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+		}
+		else {
+			glTexImage2D(GL_TEXTURE_2D, 0, format, textureData.width, textureData.height, 0, format, GL_UNSIGNED_BYTE, data);
+		}
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else

@@ -19,6 +19,7 @@ public:
 	GuichernoEngine::Sprite* library;
 	GuichernoEngine::Animation* idleAnimation;
 	GuichernoEngine::Animation* walkAnimation;
+	GuichernoEngine::Animation* libraryAnimation;
 
 	Game();
 	~Game();
