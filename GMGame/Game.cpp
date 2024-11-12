@@ -7,103 +7,178 @@
 
 Game::Game() {
 	this->player = nullptr;
-	this->enemy = nullptr;
-	this->sprite = nullptr;
+	this->rock = nullptr;
+	this->rockIdleAnimation = nullptr;
+	this->idleAnimation = nullptr;
+	this->runningAnimation = nullptr;
+	this->spinningAnimation = nullptr;
+	this->pushingAnimation = nullptr;
 }
 
 Game::~Game() {
 
 }
 
+GuichernoEngine::RectangleData playerRectangle = {
+	100.0f,
+	180.0f,
+	150.0f,
+	150.0f
+};
+
+GuichernoEngine::RectangleData rockRectangle = {
+	400.0f,
+	180.0f,
+	246.0f,
+	171.0f
+};
+
 void Game::Init()
 {
-	// 320, 240
-
-	// center this
-	this->player = new GuichernoEngine::Square({
-		320.0f, 240.0f, 100.0f, 100.0f
-		}, GuichernoEngine::RED);
-
-	this->enemy = new GuichernoEngine::Triangle(320.0f, 240.0f, 100.0f, 100.0f, GuichernoEngine::YELLOW);
-
-	this->sprite = GuichernoEngine::Sprite::FromRectangle(
-		"images/omori.png",
-		{ 
-			200.0f, 200.0f, 300.0f, 300.0f
-		}, 
+	this->player = GuichernoEngine::Sprite::FromRectangle(
+		"images/Knuckles_Sprite_Sheet.png",
+		playerRectangle,
 		GuichernoEngine::WHITE
 	);
 
-	this->library = GuichernoEngine::Sprite::FromRectangle(
-		"images/container.jpg",
-		{
-			200.0f, 200.0f, 300.0f, 300.0f
-		},
+	this->background = GuichernoEngine::Sprite::FromRectangle(
+		"images/fondo.png",
+		{ 320.0f, 240.0f, 640.0f, 480.0f },
 		GuichernoEngine::WHITE
 	);
+
+	this->square = new GuichernoEngine::Square(playerRectangle, GuichernoEngine::WHITE);
+
+	this->rock = GuichernoEngine::Sprite::FromRectangle(
+		"images/Rock.jfif",
+		rockRectangle,
+		GuichernoEngine::WHITE
+	);
+
+	GuichernoEngine::Coords rockCoords = { 76, 187 };
+	GuichernoEngine::Area rockArea = { 82, 57 };
+
+	this->rockIdleAnimation = new GuichernoEngine::Animation(
+		rockCoords,
+		rockArea,
+		{ this->rock->GetTextureWidth(), this->rock->GetTextureHeight() },
+		1,
+		1.0f // duration does not matter as it is 1 frame
+	);
+
+	// Set idle animation to set rock sprite
+	this->rock->SetAnimation(this->rockIdleAnimation);
+
+	GuichernoEngine::Coords idleCoords = { 1, 472 };
+	GuichernoEngine::Area idleArea = { 36, 39 };
 
 	this->idleAnimation = new GuichernoEngine::Animation(
-		{ 34, 438 },
-		{ 33, 32, },
-		{ this->sprite->GetTextureWidth(), this->sprite->GetTextureHeight() },
+		idleCoords,
+		idleArea,
+		{ this->player->GetTextureWidth(), this->player->GetTextureHeight() },
 		1,
-		100.0f
+		1.0f // duration does not matter as it is 1 frame
 	);
 
-	this->walkAnimation = new GuichernoEngine::Animation(
-		{ 1, 438 },
-		{ 33, 32, },
-		{ this->sprite->GetTextureWidth(), this->sprite->GetTextureHeight() },
-		3,
-		0.8f
+	GuichernoEngine::Coords spinningCoords = { 1, 342 };
+	GuichernoEngine::Area spinningArea = { 32, 28 };
+
+	this->spinningAnimation = new GuichernoEngine::Animation(
+		spinningCoords,
+		spinningArea,
+		{ this->player->GetTextureWidth(), this->player->GetTextureHeight() },
+		6,
+		1.0f
+	);
+
+	GuichernoEngine::Coords runningCoords = { 340, 429 };
+	GuichernoEngine::Area runningArea = { 40, 42 };
+
+	this->runningAnimation = new GuichernoEngine::Animation(
+		runningCoords,
+		runningArea,
+		{ this->player->GetTextureWidth(), this->player->GetTextureHeight() },
+		4,
+		0.5f
+	);
+
+	GuichernoEngine::Coords pushingCoords = { 426, 377 };
+	GuichernoEngine::Area pushingArea = { 35, 36 };
+
+	this->pushingAnimation = new GuichernoEngine::Animation(
+		pushingCoords,
+		pushingArea,
+		{ this->player->GetTextureWidth(), this->player->GetTextureHeight() },
+		4,
+		0.5f
 	);
 }
 
 void Game::DeInit()
 {
 	delete this->player;
-	delete this->enemy;
-	delete this->sprite;
+	delete this->rock;
+	delete this->background;
+	delete this->rockIdleAnimation;
+	delete this->idleAnimation;
+	delete this->runningAnimation;
+	delete this->spinningAnimation;
+	delete this->pushingAnimation;
 }
 
 void Game::Update()
 {
-	if (this->IsKeyPressed(GuichernoEngine::Keys::W)) 
+	bool isGoingRight = this->IsKeyPressed(GuichernoEngine::Keys::D);
+	bool isGoingLeft = this->IsKeyPressed(GuichernoEngine::Keys::A);
+	bool isSpinning = this->IsKeyPressed(GuichernoEngine::Keys::S);
+	bool shouldDrawAABB = this->IsKeyPressed(GuichernoEngine::Keys::Q);
+
+	float movingVelocity = 80.0f * GuichernoEngine::GETime::deltaTime;
+	float movingRockVelocity = 40.0f * GuichernoEngine::GETime::deltaTime;
+
+	if (isGoingRight) 
 	{
-		this->player->Rotate(4.0f * GuichernoEngine::GETime::deltaTime);
+		this->square->Translate(movingVelocity, 0.0f, 0.0f);
+		this->player->Translate(movingVelocity, 0.0f, 0.0f);
+
+		// Set scale as expected width and height, if it was modified because of going left
+		this->player->SetScale(playerRectangle.width, playerRectangle.height, 1.0f);
+		
+		if (this->CheckCollision(this->player, this->rock))
+		{
+			this->player->Translate(-movingVelocity, 0.0f, 0.0f);
+			this->square->Translate(-movingVelocity, 0.0f, 0.0f);
+			this->player->Translate(movingRockVelocity, 0.0f, 0.0f);
+			this->square->Translate(movingRockVelocity, 0.0f, 0.0f);
+			this->player->SetAnimation(this->pushingAnimation);
+			this->rock->Translate(movingRockVelocity, 0.0f, 0.0f);
+		}
+		else {
+			this->player->SetAnimation(this->runningAnimation);
+		}
 	}
-	this->enemy->Rotate(20.0f * GuichernoEngine::GETime::deltaTime);
-	this->enemy->Translate(0, -20.0f * GuichernoEngine::GETime::deltaTime, 0.0f);
-	// this->enemy->Scale(20.0f * GuichernoEngine::GETime::deltaTime, 20.0f * GuichernoEngine::GETime::deltaTime, 1.0f);
-	
-	GuichernoEngine::Square({
-		320.0f, 240.0f, 100.0f, 100.0f
-		}, GuichernoEngine::BLUE).Draw();
-	// this->player->Translate(0, -10.0f * GuichernoEngine::GETime::deltaTime, 0.0f);
-	this->sprite->Update();
-
-	// this->player->Draw();
-	this->enemy->Draw();
-	this->library->Draw();
-	
-
-	if(this->CheckCollision(this->player, this->enemy)) 
+	else if (isGoingLeft) 
 	{
-		std::cout << "Collision detected" << std::endl;
-	}
-	else {
-		std::cout << "No collision detected" << std::endl;
-	}
+		this->square->Translate(-movingVelocity, 0.0f, 0.0f);
+		this->player->Translate(-movingVelocity, 0.0f, 0.0f);
+		this->player->SetAnimation(this->runningAnimation);
 
-
-	if(this->IsKeyPressed(GuichernoEngine::Keys::D)) 
+		// Set scale as negative width to rotate the sprite
+		this->player->SetScale(-playerRectangle.width, playerRectangle.height, 1.0f);
+	}
+	else if (isSpinning) 
 	{
-		this->sprite->SetAnimation(this->walkAnimation);
-	}
-	else 
+		this->player->SetAnimation(this->spinningAnimation);
+	} else 
 	{
-		this->sprite->SetAnimation(this->idleAnimation);
+		this->player->SetAnimation(this->idleAnimation);
 	}
 
-	this->sprite->Draw();
+	this->background->Draw();
+	if (shouldDrawAABB) {
+		this->square->Draw();
+	}
+	this->player->Update();
+	this->player->Draw();
+	this->rock->Draw();
 }
