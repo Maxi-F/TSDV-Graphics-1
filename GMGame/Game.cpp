@@ -6,9 +6,8 @@
 #include "GETime.h"
 
 Game::Game() {
-	this->player = nullptr;
-	this->enemy = nullptr;
-	this->sprite = nullptr;
+	this->knuckles = nullptr;
+	this->rock = nullptr;
 }
 
 Game::~Game() {
@@ -17,93 +16,124 @@ Game::~Game() {
 
 void Game::Init()
 {
-	// 320, 240
-
-	// center this
-	this->player = new GuichernoEngine::Square({
-		320.0f, 240.0f, 100.0f, 100.0f
-		}, GuichernoEngine::RED);
-
-	this->enemy = new GuichernoEngine::Triangle(320.0f, 240.0f, 100.0f, 100.0f, GuichernoEngine::YELLOW);
-
-	this->sprite = GuichernoEngine::Sprite::FromRectangle(
-		"images/omori.png",
+	this->knuckles = GuichernoEngine::Sprite::FromRectangle(
+		"images/Knuckles_Sprite_Sheet.png",
 		{ 
-			200.0f, 200.0f, 300.0f, 300.0f
+			0.0f, 0.0f, 646.0f, 473.0f
 		}, 
 		GuichernoEngine::WHITE
 	);
 
-	this->library = GuichernoEngine::Sprite::FromRectangle(
-		"images/container.jpg",
+	this->rock = GuichernoEngine::Sprite::FromRectangle(
+		"images/Rock.png",
 		{
-			200.0f, 200.0f, 300.0f, 300.0f
+			500.0f, 200.0f, 244.0f, 207.0f
 		},
 		GuichernoEngine::WHITE
 	);
 
-	this->idleAnimation = new GuichernoEngine::Animation(
-		{ 34, 438 },
-		{ 33, 32, },
-		{ this->sprite->GetTextureWidth(), this->sprite->GetTextureHeight() },
+	this->idleRockAnimation = new GuichernoEngine::Animation(
+		{ 77, -20 },
+		{ 79, 57, },
+		{ this->rock->GetTextureWidth(), this->rock->GetTextureHeight() },
 		1,
 		100.0f
 	);
 
-	this->walkAnimation = new GuichernoEngine::Animation(
-		{ 1, 438 },
-		{ 33, 32, },
-		{ this->sprite->GetTextureWidth(), this->sprite->GetTextureHeight() },
-		3,
+	this->idleAnimation = new GuichernoEngine::Animation(
+		{ 1, 1 },
+		{ 36, 39, },
+		{ this->knuckles->GetTextureWidth(), this->knuckles->GetTextureHeight() },
+		1,
+		100.0f
+	);
+
+	this->spinAnimation = new GuichernoEngine::Animation(
+		{ 1, 127 },
+		{ 32, 35, },
+		{ this->knuckles->GetTextureWidth(), this->knuckles->GetTextureHeight() },
+		4,
 		0.8f
 	);
+
+	this->pushingRockAnimation = new GuichernoEngine::Animation(
+		{ 420, 377 },
+		{ 38, 40, },
+		{ this->knuckles->GetTextureWidth(), this->knuckles->GetTextureHeight() },
+		4,
+		0.8f
+	);
+
+	this->walkAnimation = new GuichernoEngine::Animation(
+		{ 1, 433 },
+		{ 40, 40, },
+		{ this->knuckles->GetTextureWidth(), this->knuckles->GetTextureHeight() },
+		5,
+		1.0f
+	);
+
+	this->knuckles->SetScale(100, 100, 0);
+	this->knuckles->SetTranslate(100, 150, 0);
 }
 
 void Game::DeInit()
 {
-	delete this->player;
-	delete this->enemy;
-	delete this->sprite;
+	delete this->knuckles;
+	delete this->rock;
 }
 
 void Game::Update()
 {
-	if (this->IsKeyPressed(GuichernoEngine::Keys::W)) 
-	{
-		this->player->Rotate(4.0f * GuichernoEngine::GETime::deltaTime);
-	}
-	this->enemy->Rotate(20.0f * GuichernoEngine::GETime::deltaTime);
-	this->enemy->Translate(0, -20.0f * GuichernoEngine::GETime::deltaTime, 0.0f);
-	// this->enemy->Scale(20.0f * GuichernoEngine::GETime::deltaTime, 20.0f * GuichernoEngine::GETime::deltaTime, 1.0f);
-	
-	GuichernoEngine::Square({
-		320.0f, 240.0f, 100.0f, 100.0f
-		}, GuichernoEngine::BLUE).Draw();
-	// this->player->Translate(0, -10.0f * GuichernoEngine::GETime::deltaTime, 0.0f);
-	this->sprite->Update();
+	this->knuckles->Update();
 
-	// this->player->Draw();
-	this->enemy->Draw();
-	this->library->Draw();
+	this->rock->Draw();
 	
-
-	if(this->CheckCollision(this->player, this->enemy)) 
+	if(this->CheckCollision(this->knuckles, this->rock)) 
 	{
 		std::cout << "Collision detected" << std::endl;
-	}
-	else {
-		std::cout << "No collision detected" << std::endl;
-	}
 
-
-	if(this->IsKeyPressed(GuichernoEngine::Keys::D)) 
-	{
-		this->sprite->SetAnimation(this->walkAnimation);
+		if (this->IsKeyPressed(GuichernoEngine::Keys::D))
+		{
+			this->knuckles->SetAnimation(this->pushingRockAnimation);
+			this->knuckles->Translate(5, 0, 0);
+			this->rock->Translate(5, 0, 0);
+		}
+		else if (this->IsKeyPressed(GuichernoEngine::Keys::A))
+		{
+			this->knuckles->SetAnimation(this->walkAnimation);
+			this->knuckles->Translate(-10, 0, 0);
+		}
+		else
+		{
+			this->knuckles->SetAnimation(this->idleAnimation);
+		}
 	}
 	else 
 	{
-		this->sprite->SetAnimation(this->idleAnimation);
+		std::cout << "No collision detected" << std::endl;
+
+		if (this->IsKeyPressed(GuichernoEngine::Keys::D))
+		{
+			this->knuckles->SetAnimation(this->walkAnimation);
+			this->knuckles->Translate(10, 0, 0);
+		}
+		else if (this->IsKeyPressed(GuichernoEngine::Keys::L))
+		{
+			this->knuckles->SetAnimation(this->spinAnimation);
+			this->knuckles->Translate(10, 0, 0);
+		}
+		else if (this->IsKeyPressed(GuichernoEngine::Keys::A))
+		{
+			this->knuckles->SetAnimation(this->walkAnimation);
+			this->knuckles->Translate(-10, 0, 0);
+		}
+		else
+		{
+			this->knuckles->SetAnimation(this->idleAnimation);
+		}
 	}
 
-	this->sprite->Draw();
+	this->rock->SetAnimation(this->idleRockAnimation);
+
+	this->knuckles->Draw();
 }

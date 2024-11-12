@@ -13,13 +13,13 @@ class Game : public GuichernoEngine::BaseGame
 private:
 
 public:
-	GuichernoEngine::Square* player;
-	GuichernoEngine::Triangle* enemy;
-	GuichernoEngine::Sprite* sprite;
-	GuichernoEngine::Sprite* library;
+	GuichernoEngine::Sprite* knuckles;
+	GuichernoEngine::Sprite* rock;
 	GuichernoEngine::Animation* idleAnimation;
+	GuichernoEngine::Animation* idleRockAnimation;
 	GuichernoEngine::Animation* walkAnimation;
-	GuichernoEngine::Animation* libraryAnimation;
+	GuichernoEngine::Animation* spinAnimation;
+	GuichernoEngine::Animation* pushingRockAnimation;
 
 	Game();
 	~Game();
