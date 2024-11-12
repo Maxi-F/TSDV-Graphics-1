@@ -84,10 +84,10 @@ void Game::Update()
 
 	// this->player->Draw();
 	this->enemy->Draw();
-	// this->library->Draw();
+	this->library->Draw();
 	
 
-	if(GuichernoEngine::CollisionManager::CheckCollision(this->player, this->enemy)) 
+	if(this->CheckCollision(this->player, this->enemy)) 
 	{
 		std::cout << "Collision detected" << std::endl;
 	}

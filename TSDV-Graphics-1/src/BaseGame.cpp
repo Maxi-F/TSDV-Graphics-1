@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "Input.h"
+#include "CollisionManager.h"
 
 using namespace GuichernoEngine;
 
@@ -86,3 +87,7 @@ bool GuichernoEngine::BaseGame::IsKeyPressed(Keys key)
     return GuichernoEngine::Input::IsKeyPressed(key);
 }
 
+bool GuichernoEngine::BaseGame::CheckCollision(Entity2D* anEntity, Entity2D* otherEntity)
+{
+    return GuichernoEngine::CollisionManager::CheckCollision(anEntity, otherEntity);
+}
